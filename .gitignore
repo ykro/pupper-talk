@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.local
+vosk-models/
+vendor/
+songs/en/
+songs/es/
+songs/mix/
+songs/clips/
+songs/song_index.json
+songs/whisper_report.json
+.claude/
