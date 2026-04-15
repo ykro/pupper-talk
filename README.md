@@ -167,7 +167,7 @@ using_bridge/            Laptop + HTTP bridge
 **using_bridge:**
 - Sin display (el LCD esta fisicamente en el Pi, no se controla desde la laptop)
 - Bridge debe estar corriendo en Pi (`pupper-bridge` FastAPI en :9090)
-- `--no-bridge` permite correr solo voz sin Pi conectado (util para probar prompts)
+- Requiere que el Pi este corriendo `pupper-bridge` (FastAPI en :9090)
 
 ## Cambio de modo por voz
 
@@ -205,8 +205,7 @@ uv run python -m on_device --mode vision --lang es
 # Laptop + bridge HTTP — voz en laptop, movimiento en Pi
 uv run python -m using_bridge --mode quiz --lang en --bridge-url http://192.168.86.20:9090
 
-# Solo voz (sin Pi) — probar prompts y modos
-uv run python -m using_bridge --mode code --lang es --no-bridge
+# Para probar sin Pi, usar on_device --mock
 ```
 
 ## Setup

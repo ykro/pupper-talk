@@ -38,8 +38,6 @@ def parse_args() -> argparse.Namespace:
                         help="Language (default: es)")
     parser.add_argument("--bridge-url", type=str, default=None,
                         help="Override BRIDGE_URL env var")
-    parser.add_argument("--no-bridge", action="store_true",
-                        help="Skip bridge (audio + Gemini only)")
     return parser.parse_args()
 
 
@@ -80,15 +78,10 @@ async def orchestrator(args: argparse.Namespace) -> None:
     register_modes()
     audio = AudioManager(mock=True)  # Always laptop mode.
 
-    # Robot backend.
-    if args.no_bridge:
-        from on_device.robot_motion import RobotMotion
-        robot = RobotMotion(mock=True)
-        logger.info("Bridge disabled — mock robot")
-    else:
-        from using_bridge.bridge_client import BridgeClient
-        robot = BridgeClient(base_url=args.bridge_url)
-        await robot.initialize()
+    # Robot backend — HTTP bridge to Pi.
+    from using_bridge.bridge_client import BridgeClient
+    robot = BridgeClient(base_url=args.bridge_url)
+    await robot.initialize()
 
     client = genai.Client(api_key=api_key)
 
