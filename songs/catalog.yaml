@@ -1,0 +1,2096 @@
+en:
+- title: Don't Stop Believin'
+  artist: Journey
+  start: 63.0
+  end: 67.0
+  mood: happy
+  role: encourage
+  lyrics: Don't stop believin', hold on to that feelin'
+  meanings:
+  - hope
+  - encouragement
+  - keep_going
+  - positive
+  - believe
+- title: Girls Just Want to Have Fun
+  artist: Cyndi Lauper
+  start: 30.7
+  end: 35.0
+  mood: happy
+  role: celebrate
+  lyrics: Girls just want to have fun
+  meanings:
+  - fun
+  - carefree
+  - party
+  - joy
+  - playful
+- title: Walking on Sunshine
+  artist: Katrina and the Waves
+  start: 51.6
+  end: 54.8
+  mood: happy
+  role: celebrate
+  lyrics: I'm walking on sunshine, whoa-oh
+  meanings:
+  - ecstatic
+  - great_mood
+  - wonderful
+  - on_top
+  - sunshine
+- title: Livin' on a Prayer
+  artist: Bon Jovi
+  start: 93.3
+  end: 97.5
+  mood: happy
+  role: encourage
+  lyrics: Whoa, we're halfway there, whoa-oh, livin' on a prayer
+  meanings:
+  - halfway
+  - progress
+  - almost_there
+  - perseverance
+  - together
+- title: Total Eclipse of the Heart
+  artist: Bonnie Tyler
+  start: 48.0
+  end: 52.2
+  mood: sad
+  role: comfort
+  lyrics: Turn around, every now and then I fall apart
+  meanings:
+  - falling_apart
+  - heartbreak
+  - vulnerable
+  - overwhelmed
+  - need_you
+- title: Everybody Hurts
+  artist: R.E.M.
+  start: 60.0
+  end: 64.0
+  mood: sad
+  role: comfort
+  lyrics: Everybody hurts sometimes
+  meanings:
+  - empathy
+  - pain
+  - comfort
+  - shared_suffering
+  - its_okay
+- title: Under Pressure
+  artist: Queen & David Bowie
+  start: 0.0
+  end: 4.0
+  mood: sad
+  role: react
+  lyrics: (iconic bass riff)
+  meanings:
+  - pressure
+  - stress
+  - tension
+  - serious
+  - heavy
+- title: With or Without You
+  artist: U2
+  start: 93.1
+  end: 97.5
+  mood: sad
+  role: ask
+  lyrics: I can't live with or without you
+  meanings:
+  - torn
+  - dilemma
+  - cant_decide
+  - love_hate
+  - conflicted
+- title: Another One Bites the Dust
+  artist: Queen
+  start: 45.5
+  end: 49.0
+  mood: angry
+  role: challenge
+  lyrics: Another one bites the dust
+  meanings:
+  - defeat
+  - someone_lost
+  - eliminated
+  - tough
+  - warning
+- title: We're Not Gonna Take It
+  artist: Twisted Sister
+  start: 16.0
+  end: 20.0
+  mood: angry
+  role: challenge
+  lyrics: We're not gonna take it, no, we ain't gonna take it
+  meanings:
+  - rebellion
+  - refuse
+  - protest
+  - enough
+  - stand_up
+- title: You Give Love a Bad Name
+  artist: Bon Jovi
+  start: 13.0
+  end: 17.0
+  mood: angry
+  role: challenge
+  lyrics: You give love a bad name
+  meanings:
+  - betrayal
+  - accusation
+  - blame
+  - bad_behavior
+  - disappointed
+- title: Eye of the Tiger
+  artist: Survivor
+  start: 26.0
+  end: 30.0
+  mood: excited
+  role: encourage
+  lyrics: It's the eye of the tiger, it's the thrill of the fight
+  meanings:
+  - fight
+  - challenge
+  - motivation
+  - strength
+  - ready
+  - bring_it_on
+- title: We Will Rock You
+  artist: Queen
+  start: 29.9
+  end: 34.1
+  mood: excited
+  role: celebrate
+  lyrics: We will, we will rock you
+  meanings:
+  - power
+  - anthem
+  - intimidation
+  - lets_go
+  - pumped
+- title: Jump
+  artist: Van Halen
+  start: 18.0
+  end: 22.0
+  mood: excited
+  role: encourage
+  lyrics: Might as well jump, go ahead and jump
+  meanings:
+  - go_for_it
+  - take_the_leap
+  - do_it
+  - courage
+  - action
+- title: Footloose
+  artist: Kenny Loggins
+  start: 14.0
+  end: 18.0
+  mood: excited
+  role: celebrate
+  lyrics: Everybody cut footloose
+  meanings:
+  - dance
+  - freedom
+  - let_loose
+  - party
+  - celebrate
+- title: Should I Stay or Should I Go
+  artist: The Clash
+  start: 66.8
+  end: 70.0
+  mood: confused
+  role: ask
+  lyrics: Should I stay or should I go now?
+  meanings:
+  - indecision
+  - choice
+  - dilemma
+  - uncertain
+  - question
+- title: Take On Me
+  artist: a-ha
+  start: 51.0
+  end: 55.0
+  mood: confused
+  role: react
+  lyrics: Take on me, take me on
+  meanings:
+  - challenge_accepted
+  - try_me
+  - confusion
+  - what
+  - huh
+- title: Once in a Lifetime
+  artist: Talking Heads
+  start: 35.8
+  end: 40.8
+  mood: confused
+  role: ask
+  lyrics: And you may ask yourself, well, how did I get here?
+  meanings:
+  - existential
+  - how_did_this_happen
+  - lost
+  - confused
+  - surprised
+- title: Every Breath You Take
+  artist: The Police
+  start: 12.0
+  end: 16.0
+  mood: neutral
+  role: state
+  lyrics: Every breath you take, every move you make, I'll be watching you
+  meanings:
+  - watching
+  - observing
+  - attentive
+  - aware
+  - paying_attention
+- title: Don't You (Forget About Me)
+  artist: Simple Minds
+  start: 79.4
+  end: 84.0
+  mood: neutral
+  role: state
+  lyrics: Don't you forget about me
+  meanings:
+  - remember_me
+  - dont_forget
+  - important
+  - plea
+  - stay
+- title: Everybody Wants to Rule the World
+  artist: Tears for Fears
+  start: 38.0
+  end: 42.0
+  mood: neutral
+  role: state
+  lyrics: Everybody wants to rule the world
+  meanings:
+  - ambition
+  - everyone
+  - universal
+  - observation
+  - philosophical
+- title: Sweet Child O' Mine
+  artist: Guns N' Roses
+  start: 45.1
+  end: 49.3
+  mood: love
+  role: love
+  lyrics: She's got a smile that it seems to me
+  meanings:
+  - admiration
+  - beautiful
+  - love
+  - smile
+  - sweet
+- title: I Want to Know What Love Is
+  artist: Foreigner
+  start: 173.9
+  end: 178.5
+  mood: love
+  role: comfort
+  lyrics: I want to know what love is, I want you to show me
+  meanings:
+  - seeking_love
+  - teach_me
+  - vulnerable
+  - open_heart
+  - longing
+- title: Is This Love
+  artist: Whitesnake
+  start: 57.0
+  end: 61.0
+  mood: love
+  role: love
+  lyrics: Is this love that I'm feeling?
+  meanings:
+  - falling_in_love
+  - question
+  - feeling
+  - butterflies
+  - romance
+- title: Time After Time
+  artist: Cyndi Lauper
+  start: 82.1
+  end: 87.0
+  mood: love
+  role: comfort
+  lyrics: If you're lost you can look and you will find me, time after time
+  meanings:
+  - loyalty
+  - always_here
+  - support
+  - reliable
+  - friendship
+  - find_me
+- title: Hello
+  artist: Lionel Richie
+  start: 39.7
+  end: 44.5
+  mood: greeting
+  role: greet
+  lyrics: Hello, is it me you're looking for?
+  meanings:
+  - hello
+  - greeting
+  - looking_for_you
+  - introduction
+  - flirty_hello
+- title: Take On Me
+  artist: a-ha
+  start: 0.0
+  end: 4.0
+  mood: greeting
+  role: greet
+  lyrics: (iconic synth intro riff)
+  meanings:
+  - attention
+  - here_i_am
+  - entrance
+  - intro
+  - arrival
+- title: Come On Eileen
+  artist: Dexys Midnight Runners
+  start: 139.7
+  end: 143.6
+  mood: greeting
+  role: greet
+  lyrics: Come on Eileen
+  meanings:
+  - come_here
+  - invitation
+  - lets_go
+  - join_me
+  - calling
+- title: The Final Countdown
+  artist: Europe
+  start: 13.0
+  end: 18.0
+  mood: goodbye
+  role: farewell
+  lyrics: (epic synth riff — the final countdown)
+  meanings:
+  - ending
+  - finale
+  - countdown
+  - departure
+  - epic_exit
+- title: I Will Always Love You
+  artist: Whitney Houston
+  start: 43.6
+  end: 48.0
+  mood: goodbye
+  role: farewell
+  lyrics: And I will always love you
+  meanings:
+  - farewell
+  - love_forever
+  - goodbye
+  - emotional_goodbye
+  - always
+- title: Don't Stop Believin'
+  artist: Journey
+  start: 216.9
+  end: 220.8
+  mood: goodbye
+  role: farewell
+  lyrics: Don't stop believin'
+  meanings:
+  - final_encouragement
+  - keep_faith
+  - parting_words
+  - hope
+- title: We Are the Champions
+  artist: Queen
+  start: 39.2
+  end: 44.0
+  mood: affirmative
+  role: affirm
+  lyrics: We are the champions, my friends
+  meanings:
+  - victory
+  - winning
+  - "yes"
+  - success
+  - we_did_it
+  - champion
+- title: Don't Stop Me Now
+  artist: Queen
+  start: 70.6
+  end: 74.9
+  mood: affirmative
+  role: affirm
+  lyrics: Don't stop me now, I'm having such a good time
+  meanings:
+  - unstoppable
+  - great
+  - amazing
+  - on_fire
+  - yes_absolutely
+- title: The Power of Love
+  artist: Huey Lewis and the News
+  start: 74.8
+  end: 78.0
+  mood: affirmative
+  role: affirm
+  lyrics: The power of love
+  meanings:
+  - love_conquers
+  - powerful
+  - affirmation
+  - strong
+  - believe_in_love
+- title: Shout
+  artist: Tears for Fears
+  start: 9.3
+  end: 14.0
+  mood: negative
+  role: deny
+  lyrics: Shout, shout, let it all out
+  meanings:
+  - release
+  - frustration
+  - express
+  - vent
+  - scream
+  - let_it_out
+- title: Another One Bites the Dust
+  artist: Queen
+  start: 0.0
+  end: 4.0
+  mood: negative
+  role: deny
+  lyrics: (bass riff intro)
+  meanings:
+  - ominous
+  - warning
+  - bad_news
+  - something_wrong
+  - nope
+- title: Hit Me with Your Best Shot
+  artist: Pat Benatar
+  start: 40.0
+  end: 44.0
+  mood: negative
+  role: deny
+  lyrics: Hit me with your best shot, fire away
+  meanings:
+  - bring_it
+  - defiant
+  - not_scared
+  - challenge
+  - fight_back
+- title: Welcome to the Jungle
+  artist: Guns N' Roses
+  start: 27.0
+  end: 31.0
+  mood: greeting
+  role: greet
+  lyrics: Welcome to the jungle, we've got fun and games
+  meanings:
+  - welcome
+  - entrance
+  - here_i_am
+  - energetic_hello
+  - party
+- title: Hey Jude
+  artist: The Beatles
+  start: 0.0
+  end: 4.5
+  mood: greeting
+  role: greet
+  lyrics: Hey Jude, don't make it bad
+  meanings:
+  - hey
+  - hello
+  - casual_greeting
+  - dont_worry
+  - friendly
+- title: Hey Ya!
+  artist: OutKast
+  start: 55.5
+  end: 59.0
+  mood: greeting
+  role: greet
+  lyrics: Hey ya! Hey ya!
+  meanings:
+  - hey
+  - hello
+  - excited_greeting
+  - fun
+  - energetic
+- title: Good Riddance (Time of Your Life)
+  artist: Green Day
+  start: 42.0
+  end: 47.0
+  mood: goodbye
+  role: farewell
+  lyrics: It's something unpredictable, but in the end it's right
+  meanings:
+  - farewell
+  - unpredictable
+  - life_lesson
+  - memories
+  - bittersweet
+- title: Closing Time
+  artist: Semisonic
+  start: 58.0
+  end: 62.0
+  mood: goodbye
+  role: farewell
+  lyrics: Closing time
+  meanings:
+  - closing
+  - ending
+  - time_to_go
+  - last_call
+  - farewell
+- title: Don't Look Back in Anger
+  artist: Oasis
+  start: 100.0
+  end: 105.0
+  mood: goodbye
+  role: farewell
+  lyrics: Don't look back in anger, I heard you say
+  meanings:
+  - no_regrets
+  - move_forward
+  - farewell
+  - peace
+  - letting_go
+- title: Lean on Me
+  artist: Bill Withers
+  start: 32.0
+  end: 37.0
+  mood: thank_you
+  role: thank
+  lyrics: Lean on me, when you're not strong
+  meanings:
+  - support
+  - help
+  - together
+  - friendship
+  - lean_on_me
+- title: Thank You for Being a Friend
+  artist: Andrew Gold
+  start: 4.0
+  end: 8.5
+  mood: thank_you
+  role: thank
+  lyrics: Thank you for being a friend
+  meanings:
+  - thank_you
+  - gratitude
+  - friendship
+  - appreciation
+  - thanks
+- title: Wind Beneath My Wings
+  artist: Bette Midler
+  start: 180.0
+  end: 185.0
+  mood: thank_you
+  role: thank
+  lyrics: Did you ever know that you're my hero
+  meanings:
+  - hero
+  - admiration
+  - gratitude
+  - youre_amazing
+  - thank_you
+- title: You've Got a Friend
+  artist: Carole King
+  start: 78.0
+  end: 82.0
+  mood: thank_you
+  role: thank
+  lyrics: You've got a friend
+  meanings:
+  - friendship
+  - support
+  - always_here
+  - count_on_me
+  - loyal
+- title: Sorry Seems to Be the Hardest Word
+  artist: Elton John
+  start: 50.0
+  end: 55.0
+  mood: sorry
+  role: apologize
+  lyrics: Sorry seems to be the hardest word
+  meanings:
+  - sorry
+  - apology
+  - regret
+  - hard_to_say
+  - forgive_me
+- title: Careless Whisper
+  artist: George Michael
+  start: 72.0
+  end: 77.0
+  mood: sorry
+  role: apologize
+  lyrics: I'm never gonna dance again
+  meanings:
+  - regret
+  - mistake
+  - guilt
+  - sorry
+  - never_again
+- title: Don't Speak
+  artist: No Doubt
+  start: 56.0
+  end: 60.0
+  mood: sorry
+  role: apologize
+  lyrics: Don't speak, I know just what you're saying
+  meanings:
+  - silence
+  - understanding
+  - painful
+  - sorry
+  - i_know
+- title: What's Love Got to Do with It
+  artist: Tina Turner
+  start: 60.0
+  end: 64.0
+  mood: question
+  role: ask
+  lyrics: What's love got to do, got to do with it
+  meanings:
+  - whats_the_point
+  - questioning
+  - skeptical
+  - why
+  - love_question
+- title: Bohemian Rhapsody
+  artist: Queen
+  start: 0.0
+  end: 5.0
+  mood: question
+  role: ask
+  lyrics: Is this the real life? Is this just fantasy?
+  meanings:
+  - is_this_real
+  - questioning_reality
+  - confused
+  - disbelief
+  - philosophical
+- title: Who Are You
+  artist: The Who
+  start: 27.0
+  end: 31.0
+  mood: question
+  role: ask
+  lyrics: Who are you? Who, who, who, who?
+  meanings:
+  - who_are_you
+  - identity
+  - questioning
+  - introduce_yourself
+  - curious
+- title: How Deep Is Your Love
+  artist: Bee Gees
+  start: 53.0
+  end: 58.0
+  mood: question
+  role: ask
+  lyrics: How deep is your love
+  meanings:
+  - how_much
+  - question
+  - deep
+  - feeling
+  - measuring
+- title: Let It Be
+  artist: The Beatles
+  start: 62.0
+  end: 67.0
+  mood: thinking
+  role: ponder
+  lyrics: Let it be, let it be, let it be, let it be
+  meanings:
+  - accept
+  - patience
+  - wisdom
+  - calm
+  - let_it_go
+  - peace
+- title: Imagine
+  artist: John Lennon
+  start: 1.0
+  end: 5.0
+  mood: thinking
+  role: ponder
+  lyrics: Imagine there's no heaven
+  meanings:
+  - imagine
+  - dream
+  - philosophical
+  - deep_thought
+  - what_if
+- title: Patience
+  artist: Guns N' Roses
+  start: 0.0
+  end: 5.0
+  mood: thinking
+  role: ponder
+  lyrics: (gentle whistling intro)
+  meanings:
+  - patience
+  - wait
+  - thinking
+  - calm
+  - contemplating
+  - hold_on
+- title: Never Gonna Give You Up
+  artist: Rick Astley
+  start: 43.0
+  end: 48.0
+  mood: funny
+  role: joke
+  lyrics: Never gonna give you up, never gonna let you down
+  meanings:
+  - rickroll
+  - joke
+  - troll
+  - surprise
+  - gotcha
+  - funny
+  - loyalty
+- title: Bohemian Rhapsody
+  artist: Queen
+  start: 181.0
+  end: 186.0
+  mood: funny
+  role: joke
+  lyrics: Galileo! Galileo! Galileo figaro magnifico
+  meanings:
+  - dramatic
+  - over_the_top
+  - theatrical
+  - funny
+  - epic
+  - absurd
+- title: Ice Ice Baby
+  artist: Vanilla Ice
+  start: 17.0
+  end: 21.0
+  mood: funny
+  role: joke
+  lyrics: Ice ice baby
+  meanings:
+  - cool
+  - chill
+  - joke
+  - 90s
+  - cheesy
+  - funny
+- title: Crazy Train
+  artist: Ozzy Osbourne
+  start: 0.0
+  end: 4.5
+  mood: funny
+  role: joke
+  lyrics: All aboard! Hahaha
+  meanings:
+  - crazy
+  - laugh
+  - wild
+  - insane
+  - buckle_up
+  - funny
+- title: Levitating
+  artist: Dua Lipa
+  start: 162.0
+  end: 165.5
+  mood: happy
+  role: celebrate
+  lyrics: I'm levitating
+  meanings:
+  - floating
+  - flying
+  - happy
+  - euphoric
+  - levitating
+- title: Flowers
+  artist: Miley Cyrus
+  start: 43.0
+  end: 47.0
+  mood: happy
+  role: encourage
+  lyrics: I can buy myself flowers
+  meanings:
+  - independent
+  - self_love
+  - empowered
+  - dont_need_you
+  - flowers
+- title: drivers license
+  artist: Olivia Rodrigo
+  start: 0.0
+  end: 5.0
+  mood: sad
+  role: comfort
+  lyrics: I got my drivers license last week
+  meanings:
+  - growing_up
+  - moving_on
+  - bittersweet
+  - heartbreak
+  - nostalgia
+- title: good 4 u
+  artist: Olivia Rodrigo
+  start: 32.0
+  end: 36.0
+  mood: angry
+  role: challenge
+  lyrics: Good for you, you look happy and healthy
+  meanings:
+  - sarcastic
+  - good_for_you
+  - angry
+  - jealous
+  - bitter
+- title: Blinding Lights
+  artist: The Weeknd
+  start: 50.0
+  end: 54.0
+  mood: excited
+  role: react
+  lyrics: I'm blinded by the lights
+  meanings:
+  - blinded
+  - lights
+  - energy
+  - night
+  - intense
+  - running
+- title: Espresso
+  artist: Sabrina Carpenter
+  start: 42.0
+  end: 46.0
+  mood: excited
+  role: state
+  lyrics: That's that me espresso
+  meanings:
+  - confident
+  - espresso
+  - addictive
+  - catchy
+  - cool
+  - energetic
+- title: Die With a Smile
+  artist: Lady Gaga & Bruno Mars
+  start: 55.0
+  end: 59.0
+  mood: love
+  role: love
+  lyrics: I'd die with a smile
+  meanings:
+  - devotion
+  - die_for_you
+  - love
+  - eternal
+  - romantic
+- title: Anti-Hero
+  artist: Taylor Swift
+  start: 172.0
+  end: 176.0
+  mood: funny
+  role: joke
+  lyrics: It's me, hi, I'm the problem, it's me
+  meanings:
+  - self_aware
+  - problem
+  - funny
+  - honest
+  - its_me
+  - relatable
+- title: bad guy
+  artist: Billie Eilish
+  start: 16.0
+  end: 20.0
+  mood: funny
+  role: joke
+  lyrics: I'm the bad guy, duh
+  meanings:
+  - bad_guy
+  - duh
+  - sarcastic
+  - tough
+  - rebel
+  - funny
+- title: Save Your Tears
+  artist: The Weeknd
+  start: 58.0
+  end: 62.0
+  mood: sorry
+  role: apologize
+  lyrics: Save your tears for another day
+  meanings:
+  - dont_cry
+  - save_tears
+  - another_day
+  - sorry
+  - strength
+- title: Say So
+  artist: Doja Cat
+  start: 31.5
+  end: 34.5
+  mood: question
+  role: ask
+  lyrics: Why don't you say so
+  meanings:
+  - speak_up
+  - say_it
+  - question
+  - tell_me
+  - why
+- title: As It Was
+  artist: Harry Styles
+  start: 53.0
+  end: 57.0
+  mood: neutral
+  role: state
+  lyrics: As it was
+  meanings:
+  - nostalgia
+  - things_change
+  - past
+  - reflection
+  - as_it_was
+es:
+- title: Danza Kuduro
+  artist: Don Omar ft. Lucenzo
+  start: 42.0
+  end: 46.0
+  mood: happy
+  role: celebrate
+  lyrics: Danza kuduro, la mano arriba, cintura sola
+  meanings:
+  - dance
+  - hands_up
+  - party
+  - move
+  - celebration
+- title: Ella Me Levanto
+  artist: Daddy Yankee
+  start: 28.0
+  end: 32.0
+  mood: happy
+  role: celebrate
+  lyrics: Ella me levantó
+  meanings:
+  - she_lifted_me
+  - inspired
+  - motivated
+  - better_because_of_you
+- title: Vivir Mi Vida
+  artist: Marc Anthony
+  start: 28.0
+  end: 33.0
+  mood: happy
+  role: celebrate
+  lyrics: Voy a reír, voy a bailar, vivir mi vida la la la
+  meanings:
+  - live_my_life
+  - laugh
+  - dance
+  - enjoy
+  - carpe_diem
+  - joy
+- title: Te Robare
+  artist: Nicky Jam ft. Ozuna
+  start: 50.0
+  end: 54.0
+  mood: sad
+  role: love
+  lyrics: Te robaré, te robaré
+  meanings:
+  - longing
+  - want_you
+  - steal_you_away
+  - desire
+  - missing_you
+- title: Desesperados
+  artist: Rauw Alejandro ft. Chencho Corleone
+  start: 33.1
+  end: 35.1
+  mood: sad
+  role: ask
+  lyrics: Desesperados
+  meanings:
+  - desperate
+  - hopeless
+  - lost
+  - need_help
+  - struggling
+- title: Abusadora
+  artist: Wisin & Yandel
+  start: 35.9
+  end: 37.9
+  mood: angry
+  role: challenge
+  lyrics: Abusadora
+  meanings:
+  - abuser
+  - unfair
+  - taking_advantage
+  - accusation
+  - angry
+- title: Pam Pam
+  artist: Wisin & Yandel
+  start: 22.0
+  end: 26.0
+  mood: angry
+  role: react
+  lyrics: Pam pam pam
+  meanings:
+  - impact
+  - hit
+  - boom
+  - intense
+  - aggressive
+  - pow
+- title: Gasolina
+  artist: Daddy Yankee
+  start: 22.0
+  end: 26.0
+  mood: excited
+  role: celebrate
+  lyrics: A ella le gusta la gasolina, dame más gasolina
+  meanings:
+  - energy
+  - fuel
+  - more
+  - hype
+  - lets_go
+  - party
+  - give_me_more
+- title: Rakata
+  artist: Wisin & Yandel
+  start: 110.7
+  end: 112.7
+  mood: excited
+  role: celebrate
+  lyrics: Rakata rakata
+  meanings:
+  - move
+  - dance
+  - rhythm
+  - energy
+  - go_go_go
+- title: Sacala
+  artist: Don Omar
+  start: 55.5
+  end: 57.9
+  mood: excited
+  role: celebrate
+  lyrics: Sácala, sácala
+  meanings:
+  - take_it_out
+  - show_it
+  - bring_it
+  - reveal
+  - action
+- title: Algo Me Gusta de Ti
+  artist: Wisin & Yandel ft. Chris Brown
+  start: 178.3
+  end: 181.7
+  mood: confused
+  role: ask
+  lyrics: Algo me gusta de ti
+  meanings:
+  - something_about_you
+  - attracted
+  - cant_explain
+  - curious
+  - intrigued
+- title: Noche de Sexo
+  artist: Wisin & Yandel
+  start: 20.2
+  end: 22.3
+  mood: confused
+  role: love
+  lyrics: Noche de sexo
+  meanings:
+  - night
+  - intimate
+  - awkward
+  - inappropriate
+  - oops
+- title: Mayor Que Yo
+  artist: Wisin & Yandel ft. Daddy Yankee
+  start: 49.5
+  end: 51.5
+  mood: neutral
+  role: state
+  lyrics: Mayor que yo
+  meanings:
+  - older
+  - bigger
+  - comparison
+  - observation
+  - matter_of_fact
+- title: Siguelo Bailando
+  artist: Ozuna
+  start: 48.5
+  end: 50.5
+  mood: neutral
+  role: state
+  lyrics: Síguelo bailando
+  meanings:
+  - keep_dancing
+  - continue
+  - carry_on
+  - dont_stop
+  - chill
+- title: Llame Pa Verte
+  artist: Wisin & Yandel
+  start: 9.5
+  end: 11.5
+  mood: love
+  role: love
+  lyrics: Llamé pa' verte
+  meanings:
+  - called_to_see_you
+  - miss_you
+  - want_to_see_you
+  - reaching_out
+- title: Te Quiero
+  artist: Flex
+  start: 24.8
+  end: 26.8
+  mood: love
+  role: love
+  lyrics: Te quiero
+  meanings:
+  - i_love_you
+  - love
+  - affection
+  - caring
+  - te_quiero
+- title: Danza Kuduro
+  artist: Don Omar ft. Lucenzo
+  start: 0.0
+  end: 4.0
+  mood: greeting
+  role: greet
+  lyrics: (intro beat)
+  meanings:
+  - entrance
+  - arrival
+  - here_we_go
+  - starting
+  - hello
+- title: Aullando
+  artist: Wisin & Yandel
+  start: 180.1
+  end: 182.1
+  mood: goodbye
+  role: farewell
+  lyrics: Aullando
+  meanings:
+  - howling
+  - farewell
+  - cry
+  - emotional
+  - leaving
+- title: Gasolina
+  artist: Daddy Yankee
+  start: 31.4
+  end: 34.3
+  mood: affirmative
+  role: affirm
+  lyrics: Dame más gasolina
+  meanings:
+  - give_me_more
+  - "yes"
+  - more_please
+  - absolutely
+  - fuel_me
+- title: Rakata
+  artist: Wisin & Yandel
+  start: 62.0
+  end: 66.0
+  mood: negative
+  role: deny
+  lyrics: (aggressive beat drop)
+  meanings:
+  - 'no'
+  - stop
+  - aggressive
+  - back_off
+  - warning
+- title: Titi Me Pregunto
+  artist: Bad Bunny
+  start: 10.7
+  end: 13.7
+  mood: happy
+  role: celebrate
+  lyrics: Titi me preguntó si tengo muchas novias
+  meanings:
+  - playful
+  - joking
+  - funny
+  - bragging
+  - lighthearted
+- title: Provenza
+  artist: Karol G
+  start: 133.0
+  end: 135.0
+  mood: happy
+  role: celebrate
+  lyrics: Provenza, baby, llévame a Provenza
+  meanings:
+  - vacation
+  - escape
+  - paradise
+  - lets_go_somewhere
+  - dreaming
+- title: Efecto
+  artist: Bad Bunny
+  start: 45.0
+  end: 49.0
+  mood: sad
+  role: react
+  lyrics: Efecto
+  meanings:
+  - effect
+  - impact
+  - consequence
+  - aftermath
+  - feeling_it
+- title: Columbia
+  artist: Quevedo
+  start: 18.7
+  end: 20.7
+  mood: sad
+  role: comfort
+  lyrics: Quédate
+  meanings:
+  - stay
+  - dont_leave
+  - please
+  - lonely
+  - missing_you
+- title: Perro Negro
+  artist: Bad Bunny ft. Feid
+  start: 55.4
+  end: 57.6
+  mood: angry
+  role: challenge
+  lyrics: Perro negro, perro negro
+  meanings:
+  - black_dog
+  - fierce
+  - tough
+  - aggressive
+  - dont_mess_with_me
+- title: TQG
+  artist: Karol G ft. Shakira
+  start: 92.6
+  end: 94.6
+  mood: angry
+  role: challenge
+  lyrics: Te quedó grande, te quedó grande
+  meanings:
+  - too_much_for_you
+  - you_couldnt_handle
+  - rejection
+  - savage
+  - over_it
+- title: Monaco
+  artist: Bad Bunny
+  start: 22.0
+  end: 26.0
+  mood: excited
+  role: celebrate
+  lyrics: Mónaco
+  meanings:
+  - luxury
+  - living_large
+  - fancy
+  - winning
+  - top_of_the_world
+- title: La Jumpa
+  artist: Arcangel ft. Bad Bunny
+  start: 35.0
+  end: 39.0
+  mood: excited
+  role: celebrate
+  lyrics: La jumpa
+  meanings:
+  - jump
+  - hype
+  - energy
+  - party
+  - go_crazy
+  - turnt
+- title: Where She Goes
+  artist: Bad Bunny
+  start: 93.5
+  end: 95.5
+  mood: confused
+  role: ask
+  lyrics: Where she goes?
+  meanings:
+  - where
+  - lost
+  - searching
+  - dont_know
+  - wondering
+- title: Punto 40
+  artist: Rauw Alejandro ft. Baby Rasta
+  start: 28.0
+  end: 32.0
+  mood: confused
+  role: ask
+  lyrics: Punto cuarenta
+  meanings:
+  - tipping_point
+  - limit
+  - edge
+  - uncertain
+  - whats_happening
+- title: Ojitos Lindos
+  artist: Bad Bunny ft. Bomba Estereo
+  start: 108.0
+  end: 113.0
+  mood: neutral
+  role: state
+  lyrics: Ojitos lindos
+  meanings:
+  - pretty_eyes
+  - observing
+  - noticing
+  - calm
+  - appreciation
+- title: Ojitos Lindos
+  artist: Bad Bunny ft. Bomba Estereo
+  start: 48.0
+  end: 53.0
+  mood: love
+  role: love
+  lyrics: Me gustan tus ojitos lindos
+  meanings:
+  - i_like_you
+  - beautiful
+  - admiration
+  - sweet
+  - falling_for_you
+- title: Beso
+  artist: Rauw Alejandro ft. Rosalia
+  start: 26.0
+  end: 30.0
+  mood: love
+  role: love
+  lyrics: Beso
+  meanings:
+  - kiss
+  - romance
+  - affection
+  - intimate
+  - love
+- title: Dakiti
+  artist: Bad Bunny ft. Jhay Cortez
+  start: 120.1
+  end: 122.1
+  mood: greeting
+  role: greet
+  lyrics: Dákiti
+  meanings:
+  - hello
+  - catchy
+  - entrance
+  - tropical
+  - smooth_greeting
+- title: Me Porto Bonito
+  artist: Bad Bunny ft. Chencho Corleone
+  start: 48.2
+  end: 51.3
+  mood: goodbye
+  role: farewell
+  lyrics: Me porto bonito pa' que me recuerdes
+  meanings:
+  - behaving_well
+  - remember_me
+  - farewell
+  - leaving_impression
+  - goodbye
+- title: Bichota
+  artist: Karol G
+  start: 48.6
+  end: 50.6
+  mood: affirmative
+  role: affirm
+  lyrics: Bichota
+  meanings:
+  - boss
+  - powerful
+  - yes_i_am
+  - confident
+  - queen
+  - absolutely
+- title: Yonaguni
+  artist: Bad Bunny
+  start: 38.3
+  end: 40.3
+  mood: affirmative
+  role: affirm
+  lyrics: Yonaguni
+  meanings:
+  - dreamy
+  - "yes"
+  - go_with_the_flow
+  - accepting
+  - sure
+- title: El Apagon
+  artist: Bad Bunny
+  start: 35.2
+  end: 37.2
+  mood: negative
+  role: deny
+  lyrics: El apagón
+  meanings:
+  - blackout
+  - shutdown
+  - 'no'
+  - darkness
+  - end
+  - cut_off
+- title: Andrea
+  artist: Bad Bunny ft. Buscabulla
+  start: 134.4
+  end: 136.4
+  mood: negative
+  role: deny
+  lyrics: Andrea
+  meanings:
+  - calling_out
+  - disappointment
+  - melancholy
+  - 'no'
+  - not_this
+- title: Despacito
+  artist: Luis Fonsi ft. Daddy Yankee
+  start: 42.0
+  end: 46.0
+  mood: greeting
+  role: greet
+  lyrics: Despacito
+  meanings:
+  - hello
+  - slowly
+  - smooth
+  - entrance
+  - casual
+- title: Suavemente
+  artist: Elvis Crespo
+  start: 36.0
+  end: 40.0
+  mood: greeting
+  role: greet
+  lyrics: Suavemente, besame
+  meanings:
+  - softly
+  - smooth_entrance
+  - hello
+  - kiss
+  - warm_greeting
+- title: La Bamba
+  artist: Ritchie Valens
+  start: 3.0
+  end: 7.0
+  mood: greeting
+  role: greet
+  lyrics: Para bailar la bamba
+  meanings:
+  - dance
+  - lets_go
+  - party
+  - hello
+  - energetic_entrance
+- title: La Despedida
+  artist: Daddy Yankee
+  start: 40.0
+  end: 44.0
+  mood: goodbye
+  role: farewell
+  lyrics: La despedida
+  meanings:
+  - farewell
+  - goodbye
+  - leaving
+  - the_farewell
+  - see_you_later
+- title: Hasta el Amanecer
+  artist: Nicky Jam
+  start: 51.0
+  end: 55.0
+  mood: goodbye
+  role: farewell
+  lyrics: Hasta el amanecer
+  meanings:
+  - until_dawn
+  - see_you
+  - goodbye
+  - later
+  - night
+- title: Duele el Corazon
+  artist: Enrique Iglesias ft. Wisin
+  start: 52.0
+  end: 56.0
+  mood: goodbye
+  role: farewell
+  lyrics: Duele el corazon
+  meanings:
+  - heart_hurts
+  - sad_goodbye
+  - emotional
+  - farewell
+  - miss_you
+- title: Gracias a la Vida
+  artist: Mercedes Sosa
+  start: 5.0
+  end: 10.0
+  mood: thank_you
+  role: thank
+  lyrics: Gracias a la vida que me ha dado tanto
+  meanings:
+  - thank_you
+  - gratitude
+  - life
+  - grateful
+  - blessed
+- title: Color Esperanza
+  artist: Diego Torres
+  start: 73.0
+  end: 78.0
+  mood: thank_you
+  role: thank
+  lyrics: Saber que se puede, querer que se pueda
+  meanings:
+  - hope
+  - you_can_do_it
+  - encouragement
+  - strength
+  - believe
+- title: A Dios Le Pido
+  artist: Juanes
+  start: 55.0
+  end: 59.0
+  mood: thank_you
+  role: thank
+  lyrics: A Dios le pido
+  meanings:
+  - prayer
+  - gratitude
+  - please
+  - hope
+  - asking
+  - thankful
+- title: Lo Siento BB
+  artist: Tainy ft. Bad Bunny & Julieta Venegas
+  start: 45.0
+  end: 49.0
+  mood: sorry
+  role: apologize
+  lyrics: Lo siento, BB, lo siento
+  meanings:
+  - sorry
+  - apology
+  - regret
+  - forgive_me
+  - lo_siento
+- title: Mala Mia
+  artist: Maluma
+  start: 56.0
+  end: 60.0
+  mood: sorry
+  role: apologize
+  lyrics: Mala mia, mala mia
+  meanings:
+  - my_bad
+  - sorry
+  - mistake
+  - oops
+  - forgive_me
+- title: Amorfoda
+  artist: Bad Bunny
+  start: 65.0
+  end: 69.0
+  mood: sorry
+  role: apologize
+  lyrics: Amorfoda
+  meanings:
+  - heartbreak
+  - regret
+  - messed_up
+  - sorry
+  - pain
+- title: Que Pretendes
+  artist: J Balvin ft. Bad Bunny
+  start: 55.0
+  end: 59.0
+  mood: question
+  role: ask
+  lyrics: Que pretendes
+  meanings:
+  - what_do_you_want
+  - questioning
+  - asking
+  - curious
+  - tell_me
+- title: Dimelo
+  artist: Ozuna
+  start: 40.0
+  end: 44.0
+  mood: question
+  role: ask
+  lyrics: Dimelo
+  meanings:
+  - tell_me
+  - asking
+  - question
+  - curious
+  - whats_up
+- title: Dime
+  artist: Ivy Queen
+  start: 65.0
+  end: 69.0
+  mood: question
+  role: ask
+  lyrics: Dime
+  meanings:
+  - tell_me
+  - asking
+  - speak_up
+  - question
+  - whats_on_your_mind
+- title: Calma
+  artist: Pedro Capo
+  start: 42.0
+  end: 46.0
+  mood: thinking
+  role: ponder
+  lyrics: Calma
+  meanings:
+  - calm
+  - relax
+  - patience
+  - easy
+  - chill
+  - thinking
+- title: Con Calma
+  artist: Daddy Yankee ft. Snow
+  start: 62.0
+  end: 66.0
+  mood: thinking
+  role: ponder
+  lyrics: Con calma
+  meanings:
+  - with_calm
+  - patience
+  - take_it_easy
+  - slowly
+  - thinking
+  - processing
+- title: Tranquila
+  artist: J Balvin
+  start: 38.0
+  end: 42.0
+  mood: thinking
+  role: ponder
+  lyrics: Tranquila
+  meanings:
+  - relax
+  - easy
+  - dont_worry
+  - thinking
+  - calm
+  - patience
+- title: La Macarena
+  artist: Los del Rio
+  start: 8.0
+  end: 12.0
+  mood: funny
+  role: joke
+  lyrics: Dale a tu cuerpo alegria Macarena
+  meanings:
+  - dance
+  - funny
+  - classic
+  - joy
+  - cheesy
+  - everyone_knows
+- title: Loca
+  artist: Shakira
+  start: 37.0
+  end: 41.0
+  mood: funny
+  role: joke
+  lyrics: Loca, loca, loca
+  meanings:
+  - crazy
+  - wild
+  - funny
+  - silly
+  - insane
+  - loca
+- title: Waka Waka
+  artist: Shakira
+  start: 48.0
+  end: 52.0
+  mood: funny
+  role: joke
+  lyrics: Waka waka, eh eh
+  meanings:
+  - celebration
+  - funny
+  - catchy
+  - world_cup
+  - energetic
+  - silly
+- title: De Musica Ligera
+  artist: Soda Stereo
+  start: 72.0
+  end: 76.0
+  mood: happy
+  role: celebrate
+  lyrics: De musica ligera
+  meanings:
+  - lighthearted
+  - free
+  - easy
+  - music
+  - joy
+  - carefree
+- title: Oye Mi Amor
+  artist: Mana
+  start: 55.0
+  end: 59.0
+  mood: happy
+  role: celebrate
+  lyrics: Oye mi amor, no me digas que no
+  meanings:
+  - listen
+  - my_love
+  - hey
+  - calling
+  - attention
+  - dont_say_no
+- title: Lamento Boliviano
+  artist: Enanitos Verdes
+  start: 56.0
+  end: 61.0
+  mood: sad
+  role: comfort
+  lyrics: Y yo estoy aqui, borracho y loco
+  meanings:
+  - lonely
+  - drunk
+  - crazy
+  - sad
+  - here_i_am
+  - lost
+- title: El Duelo
+  artist: La Ley
+  start: 65.0
+  end: 69.0
+  mood: sad
+  role: comfort
+  lyrics: El duelo
+  meanings:
+  - mourning
+  - duel
+  - sadness
+  - loss
+  - grief
+- title: Gimme the Power
+  artist: Molotov
+  start: 28.0
+  end: 32.0
+  mood: angry
+  role: challenge
+  lyrics: Gimme the power
+  meanings:
+  - power
+  - rebellion
+  - fight
+  - give_me
+  - protest
+  - rage
+- title: La Ingrata
+  artist: Cafe Tacvba
+  start: 50.0
+  end: 54.0
+  mood: angry
+  role: challenge
+  lyrics: Ingrata, no me digas que me quieres
+  meanings:
+  - ungrateful
+  - accusation
+  - betrayal
+  - angry
+  - fed_up
+- title: En la Ciudad de la Furia
+  artist: Soda Stereo
+  start: 82.0
+  end: 86.0
+  mood: excited
+  role: celebrate
+  lyrics: Me veras volar
+  meanings:
+  - fly
+  - freedom
+  - city
+  - intensity
+  - power
+  - soaring
+- title: Eres
+  artist: Cafe Tacvba
+  start: 45.0
+  end: 49.0
+  mood: love
+  role: love
+  lyrics: Eres
+  meanings:
+  - you_are
+  - everything
+  - love
+  - special
+  - adoration
+- title: Labios Compartidos
+  artist: Mana
+  start: 70.0
+  end: 74.0
+  mood: love
+  role: love
+  lyrics: Labios compartidos
+  meanings:
+  - shared_lips
+  - passion
+  - forbidden
+  - desire
+  - love
+- title: Limon y Sal
+  artist: Julieta Venegas
+  start: 55.0
+  end: 59.0
+  mood: love
+  role: love
+  lyrics: Yo te quiero con limon y sal
+  meanings:
+  - love_you
+  - lemon_and_salt
+  - unconditional
+  - accept
+  - as_you_are
+- title: Me Voy
+  artist: Julieta Venegas
+  start: 48.0
+  end: 52.0
+  mood: goodbye
+  role: farewell
+  lyrics: Me voy
+  meanings:
+  - leaving
+  - goodbye
+  - farewell
+  - moving_on
+  - done
+- title: Sone
+  artist: Zoe
+  start: 55.0
+  end: 59.0
+  mood: thinking
+  role: ponder
+  lyrics: Sone
+  meanings:
+  - dreamed
+  - thinking
+  - imagining
+  - wonder
+  - deep
+  - reflective
+- title: Clavado en un Bar
+  artist: Mana
+  start: 65.0
+  end: 69.0
+  mood: neutral
+  role: state
+  lyrics: Clavado en un bar
+  meanings:
+  - stuck
+  - bar
+  - drinking
+  - contemplating
+  - lost
+  - numb
+- title: Donde Jugaran los Ninos
+  artist: Mana
+  start: 45.0
+  end: 49.0
+  mood: question
+  role: ask
+  lyrics: Donde jugaran los ninos
+  meanings:
+  - where
+  - children
+  - question
+  - philosophical
+  - concern
+  - future
+- title: La Negra Tomasa
+  artist: Caifanes
+  start: 35.0
+  end: 39.0
+  mood: greeting
+  role: greet
+  lyrics: La negra Tomasa
+  meanings:
+  - hello
+  - fun
+  - party
+  - dance
+  - entrance
+  - classic
+- title: Te Felicito
+  artist: Shakira ft. Rauw Alejandro
+  start: 55.0
+  end: 59.0
+  mood: angry
+  role: challenge
+  lyrics: Te felicito, que bien actuas
+  meanings:
+  - congratulations
+  - sarcastic
+  - liar
+  - acting
+  - fake
+  - savage
+- title: BZRP Music Sessions 53
+  artist: Shakira ft. Bizarrap
+  start: 35.0
+  end: 39.0
+  mood: affirmative
+  role: affirm
+  lyrics: Las mujeres ya no lloran, las mujeres facturan
+  meanings:
+  - empowered
+  - boss
+  - women
+  - fierce
+  - billing
+  - strong
+- title: DESPENCHA
+  artist: Rosalia
+  start: 40.0
+  end: 44.0
+  mood: excited
+  role: challenge
+  lyrics: Despencha
+  meanings:
+  - scorned
+  - over_it
+  - fierce
+  - empowered
+  - moving_on
+  - party
+- title: Todo de Ti
+  artist: Rauw Alejandro
+  start: 45.0
+  end: 49.0
+  mood: love
+  role: love
+  lyrics: Todo de ti
+  meanings:
+  - everything_about_you
+  - love
+  - obsessed
+  - all_of_you
+  - sweet
+- title: Un x100to
+  artist: Grupo Frontera ft. Bad Bunny
+  start: 48.0
+  end: 52.0
+  mood: love
+  role: love
+  lyrics: Un poquito
+  meanings:
+  - a_little_bit
+  - small
+  - cute
+  - love
+  - tender
+- title: Ella Baila Sola
+  artist: Eslabon Armado ft. Peso Pluma
+  start: 55.0
+  end: 59.0
+  mood: neutral
+  role: state
+  lyrics: Ella baila sola
+  meanings:
+  - she_dances_alone
+  - observing
+  - independent
+  - mysterious
+  - cool
+- title: BIZCOCHITO
+  artist: Rosalia
+  start: 28.0
+  end: 32.0
+  mood: funny
+  role: joke
+  lyrics: Bizcochito
+  meanings:
+  - cupcake
+  - sweet
+  - cute
+  - funny
+  - treat
+  - silly
+- title: Pepas
+  artist: Farruko
+  start: 55.0
+  end: 59.0
+  mood: excited
+  role: celebrate
+  lyrics: Pepas
+  meanings:
+  - party
+  - hype
+  - crazy
+  - shots
+  - fun
+  - wild
+- title: Tusa
+  artist: Karol G ft. Nicki Minaj
+  start: 45.0
+  end: 49.0
+  mood: sad
+  role: comfort
+  lyrics: Tiene una tusa
+  meanings:
+  - heartbroken
+  - over_him
+  - sad
+  - tusa
+  - moving_on
+- title: Hawaii
+  artist: Maluma
+  start: 50.0
+  end: 54.0
+  mood: sad
+  role: comfort
+  lyrics: Hawaii de vacaciones
+  meanings:
+  - fake_happy
+  - sarcastic
+  - pretending
+  - see_through_you
+  - denial
