@@ -308,7 +308,7 @@ TOOLS = [
                 parameters=types.Schema(
                     type="OBJECT",
                     properties={
-                        "reaction": types.Schema(type="STRING", enum=["nod", "shake", "shrug", "excited_jump"]),
+                        "reaction": types.Schema(type="STRING", enum=["nod", "shake", "shrug"]),
                     },
                     required=["reaction"],
                 ),
@@ -397,8 +397,8 @@ class BumblebeeMode(Mode):
             reaction = fn_args.get("reaction", "nod")
             if reaction == "nod":
                 await robot.nod()
-            elif reaction == "excited_jump":
-                await robot.dance()
+            elif reaction == "shake":
+                await robot.shake_head()
 
         return types.FunctionResponse(name=fn_name, response={"status": "ok"}, id=fc_id)
 

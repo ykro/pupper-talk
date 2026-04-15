@@ -127,7 +127,7 @@ using_bridge/            Laptop + HTTP bridge
 |------|----------|--------|
 | **live** | dance, nod | Celebrar, asentir |
 | **rocky** | dance, nod | "Amaze!" = dance, "Is good" = nod |
-| **bumblebee** | dance, nod, shake, excited_jump | Segun el clip que reproduce |
+| **bumblebee** | dance, nod, shake | Segun el clip que reproduce |
 | **vision** | look_around | Cuando busca nuevos objetos |
 | **quiz** | dance | Cuando aciertas una pregunta |
 | **code** | nod | Al presentar la solucion |
