@@ -1,0 +1,249 @@
+# pupper-talk
+
+Demo unificado para Mini Pupper 2 con 7 modos de interaccion por voz, cambio de modo por hotword, y dos backends de control (directo en Pi o via HTTP bridge).
+
+## Modos
+
+### live (default)
+Conversacion libre. Habla de lo que quieras — ciencia, filosofia, el clima, consejos. Tiene Google Search para preguntas factuales. Baila cuando esta emocionado, asiente cuando esta de acuerdo.
+
+**Ejemplos:**
+- "Como esta el clima en Guatemala?"
+- "Explicame la teoria de la relatividad"
+- "Que piensas de la inteligencia artificial?"
+
+### rocky
+Rocky, el alien Eridiano de Project Hail Mary. Habla sin articulos, repite palabras tres veces ("Amaze amaze amaze!"), termina con "pregunta"/"afirmacion". Produce sonidos musicales Eridianos cuando se emociona. Tiene Google Search ("I use human device, afirmacion!").
+
+**Ejemplos:**
+- "Rocky, de donde vienes?"
+- "Que es el Astrophage?"
+- "Cuanto es la poblacion de Guatemala?" (usa Google Search)
+- Escucha los sonidos cuando dice cosas como *acorde alegre*
+
+### bumblebee
+Bumblebee no puede hablar — comunica SOLO con fragmentos de canciones. Las letras son sus palabras. Mantiene conversacion ida y vuelta: responde, pregunta, opina, bromea. 158 clips en EN y ES. Cara mecanica Autobot con ojos dorados y boca animada.
+
+**Ejemplos:**
+- "Hola, como estas?" → responde con clips de saludo + estado
+- "Estoy triste" → pregunta que paso (clip ASK), luego consuela
+- "Cuentame un chiste" → combina clips absurdos
+- "Que opinas del reggaeton?" → opina con clips
+
+### vision
+Juego "Veo Veo" (I Spy). Usa la camara para ver el entorno, escoge un objeto, y da pistas de color y primera letra. Adivina — si fallas te da mas pistas, si aciertas celebra y escoge otro. En mock muestra preview de webcam.
+
+**Ejemplos:**
+- Inicia automaticamente al entrar al modo
+- "Es una taza?" → "No, pero es algo que usas en la cocina..."
+- "Dame otra pista" → da pista adicional
+- "No se, dime" → revela y escoge nuevo objeto
+
+### quiz
+Trivia. Genera preguntas con 4 opciones (a,b,c,d) usando Gemini con JSON estructurado. Lleva puntaje. Baila cuando aciertas. Comparte un dato curioso despues de cada respuesta.
+
+**Ejemplos:**
+- Inicia automaticamente al entrar al modo
+- "La b" → verifica, dice si es correcta, da fun fact
+- "Otra pregunta" → genera nueva de tema diferente
+- Temas: ciencia, geografia, historia, cultura pop, Guatemala, tecnologia
+
+### code
+Resuelve problemas de matematicas y logica ejecutando Python en sandbox de Gemini. Habla el resultado en 1-2 oraciones.
+
+**Ejemplos:**
+- "Cuanto es 347 por 892?"
+- "Cual es la raiz cuadrada de 1764?"
+- "Si tengo 5 manzanas y le doy 2 a cada uno de 3 amigos, cuantas me quedan?"
+- "Cuantos numeros primos hay entre 1 y 1000?"
+
+### sentiment
+Pixel — perro robot emocional. Detecta el sentimiento en tu voz (tono + contenido) y cambia su expresion facial en tiempo real. Ojos animados que cambian de COLOR segun el mood: verde (happy), azul hielo (sad), rojo (angry), teal (surprised), cyan (neutral), ambar (curious). Tambien mueve el cuerpo (poses y danzas por mood). Google Search para preguntas factuales.
+
+**Ejemplos:**
+- "Estoy muy contento hoy!" → ojos verdes, pose excited, wiggle dance
+- "Me siento mal..." → ojos azul hielo, pose sad
+- "Eso me enoja mucho" → ojos rojos, pose firme
+- "Que?! En serio?!" → ojos teal grandes, pose greet + dance
+- "Cuanto cuesta un vuelo a Madrid?" → usa Google Search
+
+## Arquitectura
+
+```
+                 +-----------------+
+                 |  Gemini Live API |
+                 | (gemini-3.1-flash|
+                 |  -live-preview)  |
+                 +--------+--------+
+                          |
+               WebSocket (audio + tools)
+                          |
+          +---------------+----------------+
+          |                                |
+   +------+------+                  +------+------+
+   | on_device/  |                  | using_bridge|
+   | __main__.py |                  | __main__.py |
+   +------+------+                  +------+------+
+          |                                |
+   +------+------+                  +------+------+
+   | GifDisplay  |                  | BridgeClient|
+   | + EyeRender |                  | (HTTP POST) |
+   +------+------+                  +------+------+
+          |                                |
+   +------+------+                  +------+------+
+   | RobotMotion |                  | pupper-bridge|
+   | (servos)    |                  | (FastAPI Pi) |
+   +-------------+                  +--------------+
+
+core/                    Compartido entre on_device y using_bridge
+  audio.py               AudioManager (sounddevice, mic+speaker, echo suppression)
+  stream.py              Streaming bidireccional Gemini (mic -> API -> audio/tools)
+  audio_router.py        Dual-stream a Vosk + Gemini, pause/resume
+  hotword.py             VoskHotwordDetector (bilingual EN+ES, background)
+  camera.py              CameraManager (OpenCV, preview en mock)
+  modes/
+    base.py              Mode ABC + inject_switch_tool
+    live.py              Conversacion libre + dance/nod + Google Search
+    rocky.py             Rocky character + Eridian sounds + Google Search
+    bumblebee.py         Song clips + catalog + crossfade + Google Search
+    vision.py            I Spy + camera frames cada 5s
+    quiz.py              Trivia + JSON schema + generateContent
+    code.py              Math solver + code_execution sandbox
+    sentiment.py         Pixel emocional + set_expression + Google Search
+
+on_device/               Pi directo (MangDang HardwareInterface)
+  __main__.py            Entry point + orchestrator + mode switching
+  gif_display.py         GIF renderer + eye renderer (Bumblebee amarillo / Sentiment colores)
+  robot_motion.py        Servo control: 5 poses, 2 dances, mood reactions
+
+using_bridge/            Laptop + HTTP bridge
+  __main__.py            Entry point + orchestrator
+  bridge_client.py       httpx POST a pupper-bridge :9090
+```
+
+### Movimiento por modo
+
+| Modo | Acciones | Cuando |
+|------|----------|--------|
+| **live** | dance, nod | Celebrar, asentir |
+| **rocky** | dance, nod | "Amaze!" = dance, "Is good" = nod |
+| **bumblebee** | dance, nod, shake, excited_jump | Segun el clip que reproduce |
+| **vision** | look_around | Cuando busca nuevos objetos |
+| **quiz** | dance | Cuando aciertas una pregunta |
+| **code** | nod | Al presentar la solucion |
+| **sentiment** | react_to_mood (5 poses + 2 dances) | Cada cambio de sentimiento |
+
+### Display por modo
+
+| Modo | Display |
+|------|---------|
+| **live** | GIF animado |
+| **rocky** | GIF animado |
+| **bumblebee** | Ojos mecanicos Autobot (amarillo fijo, forma cambia por mood, boca animada) |
+| **vision** | GIF animado + preview camara (mock) |
+| **quiz** | GIF animado |
+| **code** | GIF animado |
+| **sentiment** | Ojos animados (COLOR cambia por mood: verde/azul/rojo/teal/cyan/ambar) |
+
+## on_device vs using_bridge
+
+| | on_device | using_bridge |
+|---|-----------|-------------|
+| **Donde corre** | En el Pi directamente | En laptop (audio) + Pi (movimiento via HTTP) |
+| **Servos** | MangDang HardwareInterface directo | HTTP POST a pupper-bridge (FastAPI) |
+| **LCD/Display** | ST7789 SPI (GIF o EyeRenderer) | Sin display |
+| **Audio** | Pi I2S (48kHz resample) | Laptop audio nativo (24kHz) |
+| **Vosk hotwords** | Disponible (Linux) | No disponible (macOS) |
+| **Mock mode** | `--mock` abre ventana Pygame | Siempre mock (laptop) |
+| **Cambio de modo** | Vosk hotwords o Gemini fallback | Solo Gemini fallback |
+| **Camara (vision)** | Pi camera o USB | Webcam laptop |
+
+### Limitaciones
+
+**on_device:**
+- Requiere Pi con Ubuntu 22.04 + ROS2 Humble + MangDang BSP
+- Python 3.10 (BSP requirement)
+- Audio I2S a 48kHz requiere resample
+
+**using_bridge:**
+- Sin display LCD (no GIF ni ojos animados)
+- Sin Vosk (no hay wheels para macOS) — usa Gemini switch_mode fallback
+- Bridge debe estar corriendo en Pi (`pupper-bridge` FastAPI en :9090)
+- `--no-bridge` permite correr solo voz sin robot fisico
+
+## Hotwords (Vosk, solo Pi/Linux)
+
+| Keyword | Accion |
+|---------|--------|
+| "pausa" / "pause" | Silenciar mic hacia Gemini |
+| "activo" / "active" | Reanudar mic |
+| "go rocky" | Cambiar a Rocky |
+| "go bumblebee" | Cambiar a Bumblebee |
+| "go vision" | Cambiar a Vision |
+| "go quiz" | Cambiar a Quiz |
+| "go code" | Cambiar a Code |
+| "go live" | Cambiar a Live |
+| "go sentiment" / "go pixel" | Cambiar a Sentiment |
+
+Sin Vosk (macOS), di "cambia a rocky" o "switch to quiz" y Gemini llama `switch_mode`.
+
+## Uso
+
+```bash
+# Laptop (mock)
+uv run python -m on_device --mode live --lang es --mock
+uv run python -m on_device --mode sentiment --lang es --mock
+uv run python -m on_device --mode bumblebee --lang es --mock
+
+# Pi (directo)
+uv run python -m on_device --mode rocky --lang es
+uv run python -m on_device --mode vision --lang es
+
+# Laptop + bridge HTTP
+uv run python -m using_bridge --mode quiz --lang en --bridge-url http://192.168.86.20:9090
+
+# Solo voz (sin robot)
+uv run python -m using_bridge --mode code --lang es --no-bridge
+```
+
+## Setup
+
+```bash
+# Laptop
+brew install portaudio ffmpeg
+uv sync
+
+# Pi
+sudo apt install -y libportaudio2 python3.10-venv ffmpeg
+uv venv --python 3.10 --system-site-packages
+uv sync
+```
+
+```bash
+cp .env.example .env
+# Agregar GEMINI_API_KEY
+```
+
+## Modelos Vosk (opcional, Pi)
+
+```bash
+mkdir -p vosk-models && cd vosk-models
+wget https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip
+wget https://alphacephei.com/vosk/models/vosk-model-small-es-0.42.zip
+unzip '*.zip'
+```
+
+## Issues conocidos
+
+| Issue | Severidad | Descripcion |
+|-------|-----------|-------------|
+| Session leak (bridge) | Media | `using_bridge` usa `__aenter__` manual en vez de `async with`. Puede leakear WebSocket connections tras muchos mode switches. Refactor futuro. |
+| Thread leak (mic) | Baja | `queue.Queue.get()` sin timeout en el executor thread. Tras muchos switches puede agotar el thread pool. Workaround: reiniciar la app. |
+| Audio device index (Pi) | Media | Device index hardcoded a `1` para I2S. Si el Pi enumera devices diferente tras reboot, audio falla silenciosamente. Verificar con `sd.query_devices()`. |
+| Race condition (motion) | Baja | `react_to_mood` no pone `_busy=True` antes de delegar a `_run_dance`. Dos calls concurrentes podrian pelear por los servos. En practica los tool calls son serializados. |
+| Crossfade parcial (bumblebee) | Baja | `play_sequence` solo crossfadea los primeros 2 clips. Del 3ro en adelante usa static+clip individual. |
+
+## Variables de entorno
+
+- `GEMINI_API_KEY` — requerido
+- `BRIDGE_URL` — URL de pupper-bridge (default: `http://localhost:9090`)
