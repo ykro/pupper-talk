@@ -12,3 +12,6 @@ songs/clips/
 songs/song_index.json
 songs/whisper_report.json
 .claude/
+slides/
+docs/superpowers/specs/
+~$*

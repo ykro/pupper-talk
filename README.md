@@ -22,7 +22,7 @@ Rocky, el alien Eridiano de Project Hail Mary. Habla sin articulos, repite palab
 - Escucha los sonidos cuando dice cosas como *acorde alegre*
 
 ### bumblebee
-Bumblebee no puede hablar — comunica SOLO con fragmentos de canciones. Las letras son sus palabras. Mantiene conversacion ida y vuelta: responde, pregunta, opina, bromea. 158 clips en EN y ES. Cara mecanica Autobot con ojos dorados y boca animada.
+Bumblebee no puede hablar — comunica SOLO con fragmentos de canciones. Las letras son sus palabras. Mantiene conversacion ida y vuelta: responde, pregunta, opina, bromea. 158 clips en EN y ES. Cara mecanica Autobot con ojos dorados y boca animada. Google Search para preguntas factuales (busca y responde con clips).
 
 **Ejemplos:**
 - "Hola, como estas?" → responde con clips de saludo + estado
@@ -149,13 +149,12 @@ using_bridge/            Laptop + HTTP bridge
 
 | | on_device | using_bridge |
 |---|-----------|-------------|
-| **Donde corre** | En el Pi directamente | En laptop (audio) + Pi (movimiento via HTTP) |
+| **Donde corre** | En el Pi directamente | Laptop (audio+Gemini) + Pi (servos via HTTP) |
 | **Servos** | MangDang HardwareInterface directo | HTTP POST a pupper-bridge (FastAPI) |
-| **LCD/Display** | ST7789 SPI (GIF o EyeRenderer) | Sin display |
+| **LCD/Display** | ST7789 SPI (GIF o EyeRenderer) | Sin display (el proceso corre en laptop, el LCD esta en el Pi) |
 | **Audio** | Pi I2S (48kHz resample) | Laptop audio nativo (24kHz) |
-| **Vosk hotwords** | Disponible (Linux) | No disponible (macOS) |
-| **Mock mode** | `--mock` abre ventana Pygame | Siempre mock (laptop) |
-| **Cambio de modo** | Vosk hotwords o Gemini fallback | Solo Gemini fallback |
+| **Mock mode** | `--mock` simula todo en laptop (Pygame + servos mock) | No aplica (siempre corre en laptop) |
+| **Cambio de modo** | Vosk hotwords (Pi) o Gemini fallback | Gemini fallback (di "go rocky") |
 | **Camara (vision)** | Pi camera o USB | Webcam laptop |
 
 ### Limitaciones
@@ -166,43 +165,47 @@ using_bridge/            Laptop + HTTP bridge
 - Audio I2S a 48kHz requiere resample
 
 **using_bridge:**
-- Sin display LCD (no GIF ni ojos animados)
-- Sin Vosk (no hay wheels para macOS) — usa Gemini switch_mode fallback
+- Sin display (el LCD esta fisicamente en el Pi, no se controla desde la laptop)
 - Bridge debe estar corriendo en Pi (`pupper-bridge` FastAPI en :9090)
-- `--no-bridge` permite correr solo voz sin robot fisico
+- `--no-bridge` permite correr solo voz sin Pi conectado (util para probar prompts)
 
-## Hotwords (Vosk, solo Pi/Linux)
+## Cambio de modo por voz
 
-| Keyword | Accion |
+Di **"go {modo}"** para cambiar. Funciona en todos los entornos:
+
+- **En Pi (con Vosk):** Vosk detecta el hotword localmente, sin pasar por Gemini
+- **En laptop / sin Vosk:** Gemini escucha "go rocky" y llama `switch_mode` como tool call
+
+| Comando | Accion |
 |---------|--------|
-| "pausa" / "pause" | Silenciar mic hacia Gemini |
-| "activo" / "active" | Reanudar mic |
-| "go rocky" | Cambiar a Rocky |
-| "go bumblebee" | Cambiar a Bumblebee |
-| "go vision" | Cambiar a Vision |
-| "go quiz" | Cambiar a Quiz |
-| "go code" | Cambiar a Code |
-| "go live" | Cambiar a Live |
-| "go sentiment" / "go pixel" | Cambiar a Sentiment |
-
-Sin Vosk (macOS), di "cambia a rocky" o "switch to quiz" y Gemini llama `switch_mode`.
+| "go live" | Conversacion libre |
+| "go rocky" | Rocky (Project Hail Mary) |
+| "go bumblebee" | Bumblebee (canciones) |
+| "go vision" | Veo Veo (I Spy) |
+| "go quiz" | Trivia |
+| "go code" | Resolver matematicas |
+| "go sentiment" / "go pixel" | Pixel (emocional) |
+| "pausa" / "pause" | Silenciar mic (solo Vosk) |
+| "activo" / "active" | Reanudar mic (solo Vosk) |
 
 ## Uso
 
+Sin `--mode`, inicia en **live** (conversacion libre).
+
 ```bash
-# Laptop (mock)
-uv run python -m on_device --mode live --lang es --mock
+# Laptop (mock) — simula display + robot en ventana Pygame
+uv run python -m on_device --lang es --mock
 uv run python -m on_device --mode sentiment --lang es --mock
 uv run python -m on_device --mode bumblebee --lang es --mock
 
-# Pi (directo)
+# Pi (directo) — LCD real + servos
 uv run python -m on_device --mode rocky --lang es
 uv run python -m on_device --mode vision --lang es
 
-# Laptop + bridge HTTP
+# Laptop + bridge HTTP — voz en laptop, movimiento en Pi
 uv run python -m using_bridge --mode quiz --lang en --bridge-url http://192.168.86.20:9090
 
-# Solo voz (sin robot)
+# Solo voz (sin Pi) — probar prompts y modos
 uv run python -m using_bridge --mode code --lang es --no-bridge
 ```
 

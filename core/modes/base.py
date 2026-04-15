@@ -61,8 +61,8 @@ class Mode(ABC):
 ALL_MODES = ("live", "rocky", "bumblebee", "vision", "quiz", "code", "sentiment")
 
 SWITCH_PROMPT_SNIPPET = (
-    "\n\nYou can switch demo modes. When the user says 'go rocky', 'switch to quiz', "
-    "'cambia a bumblebee', or similar, call switch_mode immediately with the target mode name. "
+    "\n\nYou can switch demo modes. When the user says 'go rocky', 'go quiz', "
+    "'go bumblebee', or similar, call switch_mode immediately with the target mode name. "
     "Available modes: live, rocky, bumblebee, vision, quiz, code, sentiment."
 )
 
