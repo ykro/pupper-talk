@@ -1,7 +1,9 @@
 # pupper-talk -- CLAUDE.md
 
 ## What it does
-Unified Mini Pupper 2 demo with 6 modes, voice hotword switching, and two robot control backends. Combines Rocky (character), Bumblebee (song clips), Vision (I Spy), Quiz (trivia), Code (math solver), and Live (conversation).
+Unified Mini Pupper 2 demo with 7 modes, voice hotword switching, and two robot control backends. Combines Live (conversation), Rocky (character), Bumblebee (song clips), Vision (I Spy), Quiz (trivia), Code (math solver), and Sentiment (emotional).
+
+Public repo: github.com/ykro/pupper-talk
 
 ## How to run
 
@@ -11,10 +13,11 @@ uv run python -m on_device --mode live --lang es
 uv run python -m on_device --mode rocky --lang en
 ```
 
-### On-device mock (laptop)
+### On-device mock (laptop) — default for testing
 ```bash
-uv run python -m on_device --mode live --lang es --mock
-uv run python -m on_device --mode quiz --lang en --mock
+uv run python -m on_device --lang es --mock               # defaults to live
+uv run python -m on_device --mode sentiment --lang es --mock
+uv run python -m on_device --mode bumblebee --lang es --mock
 ```
 
 ### Via bridge (laptop + Pi HTTP)
@@ -22,17 +25,12 @@ uv run python -m on_device --mode quiz --lang en --mock
 uv run python -m using_bridge --mode bumblebee --lang es --bridge-url http://192.168.86.20:9090
 ```
 
-### Voice only (no robot)
-```bash
-uv run python -m using_bridge --mode code --lang es --no-bridge
-```
-
 ## CLI Flags
 
 ### on_device
 | Flag | Values | Default | Description |
 |------|--------|---------|-------------|
-| `--mode` | live, rocky, bumblebee, vision, quiz, code | live | Demo mode |
+| `--mode` | live, rocky, bumblebee, vision, quiz, code, sentiment | live | Demo mode |
 | `--lang` | es, en | es | Spoken language |
 | `--mock` | flag | off | Pygame window, no LCD/servos |
 | `--no-motion` | flag | off | Disable body movements |
@@ -40,88 +38,89 @@ uv run python -m using_bridge --mode code --lang es --no-bridge
 ### using_bridge
 | Flag | Values | Default | Description |
 |------|--------|---------|-------------|
-| `--mode` | live, rocky, bumblebee, vision, quiz, code | live | Demo mode |
+| `--mode` | live, rocky, bumblebee, vision, quiz, code, sentiment | live | Demo mode |
 | `--lang` | es, en | es | Spoken language |
 | `--bridge-url` | URL | BRIDGE_URL env or localhost:9090 | Bridge endpoint |
-| `--no-bridge` | flag | off | Skip bridge, voice only |
 
-## 6 Modes
+## 7 Modes
 
 ### live (default)
-Free conversation. Fenrir voice. Tools: dance, nod.
+Free conversation. Kore voice. Tools: dance, nod, Google Search.
 
 ### rocky
-Rocky from Project Hail Mary. Puck voice. Drops articles, triple repetitions, "question"/"statement" markers. Eridian musical sounds (WAV on asterisk text). Google Search.
+Rocky from Project Hail Mary. Puck voice. Drops articles, triple repetitions, "pregunta"/"afirmacion" markers. Eridian musical sounds (WAV on asterisk text, routed through AudioManager). Tools: dance, nod, Google Search. Full prompt from pupper-characters with Fist Bump, Iconic Phrases.
 
 ### bumblebee
-Communicates via song clips. Gemini selects clips from catalog.yaml (158 clips). Crossfade playback, radio tuning effect. Google Search. Gemini audio output is ignored.
+Communicates via song clips. 158 clips in catalog.yaml. Crossfade playback, radio tuning effect. Google Search. `suppress_voice=True` — Gemini audio ignored. Eye display: mechanical Autobot yellow. Full conversation prompt with multi-turn examples and ASK clips for back-and-forth. react_body supports nod/shake/shrug.
 
 ### vision
-I Spy (Veo Veo) game. Camera frames sent to Live API every 5s. Fenrir voice. Tool: look_around. Mock uses laptop webcam.
+I Spy (Veo Veo) game. Camera frames sent to Live API every 5s (gated on `not audio.speaking` to prevent self-interruption). Kore voice. Tool: look_around. Mock shows OpenCV preview window.
 
 ### quiz
-Trivia. Fenrir voice. Live API + function calls: generate_question dispatches to generateContent with response_schema JSON, check_answer validates. Dances on correct answers.
+Trivia. Kore voice. Live API + function calls: generate_question (Gemini JSON schema), check_answer (with guard for missing question). Dances on correct answers.
 
 ### code
-Math/logic solver. Fenrir voice. Live API + function call: solve_with_code dispatches to generateContent with code_execution.
+Math/logic solver. Kore voice. Live API + function calls: solve_with_code (generateContent with code_execution), nod when presenting solution.
 
-## Voice Hotwords (Vosk)
+### sentiment
+Pixel — emotional robot dog. Detects voice sentiment (tone + content), calls set_expression to change eye COLOR in real time. 6 moods (happy=green, sad=ice, angry=red, surprised=teal, neutral=cyan, curious=amber). react_to_mood triggers pose + dance via RobotMotion MOOD_ACTIONS. Tools: set_expression, dance, nod, Google Search.
 
-Vosk runs in parallel, bilingual (EN + ES). Available on Pi (Linux). Not on macOS (no Vosk wheels).
+## Voice Hotwords
+
+Works everywhere — Vosk on Pi (Linux), Gemini switch_mode tool on laptop (macOS, no Vosk wheels).
 
 | Keyword | Action |
 |---------|--------|
-| "pausa" / "pause" | Stop sending audio to Gemini |
-| "activo" / "active" | Resume sending audio |
-| "go rocky" | Switch to Rocky mode |
-| "go bumblebee" | Switch to Bumblebee mode |
-| "go vision" | Switch to Vision mode |
-| "go quiz" | Switch to Quiz mode |
-| "go code" | Switch to Code mode |
-| "go live" | Switch to Live mode |
+| "pausa" / "pause" | Stop sending audio (Vosk only) |
+| "activo" / "active" | Resume sending audio (Vosk only) |
+| "go live" / "go rocky" / "go bumblebee" / "go vision" / "go quiz" / "go code" / "go sentiment" / "go pixel" | Switch mode |
 
 ## Architecture
 
 ```
 core/                    Shared between on_device and using_bridge
-  audio.py               AudioManager (sounddevice, mic+speaker, echo suppression, clips)
-  stream.py              Generalized response handler (works with any Mode)
-  audio_router.py        Routes mic to Vosk + Gemini, pause/resume
-  hotword.py             VoskHotwordDetector (bilingual, background)
-  camera.py              CameraManager (OpenCV, webcam in mock)
+  audio.py               AudioManager (sounddevice, mic+speaker, nestable suppression)
+  stream.py              Generalized response handler with suppress_voice + tool mic suppression
+  audio_router.py        Dual-stream mic to Vosk + Gemini, pause/resume
+  hotword.py             VoskHotwordDetector (bilingual EN+ES, background)
+  camera.py              CameraManager (OpenCV, webcam preview in mock)
   modes/
-    base.py              Mode ABC
-    live.py              Free conversation + dance/nod
-    rocky.py             Rocky character + Eridian sounds
-    bumblebee.py         Song clips + catalog + engine
-    vision.py            I Spy + camera frames
-    quiz.py              Trivia + structured JSON
-    code.py              Math solver + code_execution
+    base.py              Mode ABC + inject_switch_tool (preserves GoogleSearch)
+    live.py              Free conversation + dance/nod + Google Search
+    rocky.py             Rocky character + Eridian sounds (via AudioManager) + Google Search
+    bumblebee.py         Song clips + catalog + crossfade + Google Search + suppress_voice
+    vision.py            I Spy + camera frames gated on not speaking
+    quiz.py              Trivia + structured JSON + guard against missing question
+    code.py              Math solver + code_execution + nod
+    sentiment.py         Pixel emotional + set_expression + react_to_mood + Google Search
 
 on_device/               Pi direct (MangDang HardwareInterface)
-  __main__.py            Entry point + orchestrator
-  gif_display.py         GIF renderer with hot-swap (ST7789 SPI)
-  robot_motion.py        Servo control + poses + dances
+  __main__.py            Entry point + orchestrator + mode switching loop
+  gif_display.py         GIF renderer + Bumblebee/Sentiment eye renderers
+  robot_motion.py        Servo control: 5 poses, 2 dances, mood reactions
 
-using_bridge/            Laptop + HTTP bridge
+using_bridge/            Laptop + HTTP bridge (no display, no Vosk)
   __main__.py            Entry point + orchestrator
   bridge_client.py       httpx POST to pupper-bridge :9090
+
+songs/                   Bumblebee clips (gitignored, 6.4GB) + catalog.yaml (tracked)
+assets/                  GIFs + Eridian WAVs
 ```
 
 ## Key Technical Decisions
 
 ### All voice via Gemini Live API
-Model: gemini-3.1-flash-live-preview. Text AI: gemini-3.1-flash-lite-preview.
+Model: gemini-3.1-flash-live-preview. Text AI: gemini-3.1-flash-lite-preview (quiz JSON, code execution).
 
-### Mode ABC
-All modes implement get_live_config(), handle_tool_call(), and optional hooks (on_output_transcription for Rocky sounds, extra_tasks for Vision camera).
+### Mode ABC with suppress_voice
+All modes implement get_live_config(), handle_tool_call(), optional get_greeting(), on_output_transcription, extra_tasks, on_enter. Bumblebee sets `suppress_voice=True` to ignore Gemini audio.
 
-### Unified response handler
-core/stream.py handle_responses() works with any Mode. Eliminates duplicated response handling.
+### Unified response handler with tool mic suppression
+core/stream.py handle_responses() suppresses mic during tool execution to prevent ambient noise from interrupting (fixes code/vision self-interrupt).
 
-### Echo suppression (two-layer)
-1. audio.suppressing (clip-level): absolute silence during clip/sequence playback + cooldown.
-2. audio.speaking (chunk-level): silence unless RMS > threshold (allows interrupts).
+### Echo suppression (nestable counter)
+1. `audio.suppressing` (clip-level): absolute silence during clip/sequence playback + cooldown. Uses `_suppress_depth` counter to handle nested calls from Bumblebee + stream handler.
+2. `audio.speaking` (chunk-level): silence unless RMS > threshold (allows user interrupts).
 
 ### Threading model
 Mock (macOS): Pygame main thread, asyncio background thread.
@@ -137,17 +136,18 @@ No "DO NOT", "Never", "Stay silent" in Gemini prompts.
 - Python 3.10 (Pi BSP requirement), uv
 - Gemini Live API (gemini-3.1-flash-live-preview)
 - Gemini API (gemini-3.1-flash-lite-preview) for quiz JSON + code execution
-- sounddevice (PortAudio) for audio
-- OpenCV for camera
-- Vosk for hotword detection (Linux only)
-- pydub for clip loading (Bumblebee)
-- pyyaml for catalog parsing
-- httpx for bridge
-- Pygame + Pillow for GIF display
+- sounddevice (PortAudio), OpenCV, Vosk (Linux), pydub, pyyaml, httpx, Pygame + Pillow
 
 ## Environment variables
 - `GEMINI_API_KEY` -- required
 - `BRIDGE_URL` -- pupper-bridge URL (default: http://localhost:9090)
+
+## Known Issues
+- Session leak on many mode switches (using_bridge uses manual `__aenter__`)
+- Thread leak on mic stream cancel (`queue.Queue.get()` without timeout)
+- Hardcoded audio device index 1 on Pi (fragile if USB audio reorders)
+- Race condition in RobotMotion.react_to_mood (no _busy guard before dance)
+- Partial crossfade in bumblebee play_sequence (only first 2 clips)
 
 ## Pi Deployment
 ```bash
