@@ -2,6 +2,8 @@
 
 Demo unificado para Mini Pupper 2 con 7 modos de interaccion por voz, cambio de modo por hotword, y dos backends de control (directo en Pi o via HTTP bridge).
 
+**Slides de la charla:** [GDE Summit 2026 — pupper-talk](https://docs.google.com/presentation/d/1scd2uwQbCOYL3UUnDrJSRUVo4u01OACLcjSv0aeEBcc/present)
+
 ## Modos
 
 ### live (default)
@@ -119,6 +121,94 @@ on_device/               Pi directo (MangDang HardwareInterface)
 using_bridge/            Laptop + HTTP bridge
   __main__.py            Entry point + orchestrator
   bridge_client.py       httpx POST a pupper-bridge :9090
+```
+
+### Patron Mode ABC
+
+Todos los modos heredan de `Mode` (`core/modes/base.py`) e implementan:
+
+| Metodo / Atributo | Proposito |
+|-------------------|-----------|
+| `get_live_config(lang)` | Devuelve `LiveConnectConfig` (prompt, voz, tools, activity detection) |
+| `handle_tool_call(fc, client, audio, robot)` | Ejecuta function calls (baile, busqueda, set_expression, etc.) |
+| `get_greeting(lang)` (opcional) | Texto inicial que Gemini dice al entrar al modo |
+| `on_enter(audio, robot, display)` (opcional) | Side effects al entrar (ej. sonido de radio en Bumblebee) |
+| `on_output_transcription(text)` (opcional) | Intercepta transcripciones para trigger de efectos (Rocky `*happy*` -> WAV) |
+| `extra_tasks(session, audio, camera)` (opcional) | Corutinas en paralelo al loop principal (Vision envia frames cada 5s) |
+| `suppress_voice` (opcional) | Si `True`, ignora audio de Gemini (Bumblebee usa solo clips) |
+
+`inject_switch_tool()` agrega el tool `switch_mode` preservando tools existentes (Google Search, function declarations). Fix importante: no reemplaza tools, los combina.
+
+### Streaming loop (`core/stream.py`)
+
+Un solo handler unificado gestiona todos los modos:
+
+1. **Mic -> Gemini:** `send_audio()` envia PCM 16kHz con echo suppression (silencio durante playback, pass-through si RMS > threshold para permitir barge-in)
+2. **Gemini -> altavoz:** `handle_responses()` reproduce audio (skip si `suppress_voice=True`), procesa transcripciones, ejecuta tool calls
+3. **Tool mic suppression:** durante ejecucion de function calls, el mic se silencia (`audio.start_suppression()`) para evitar que ruido ambiental interrumpa al bot mientras procesa
+4. **Switch mode:** si se llama `switch_mode`, el handler pone `switching=True` y drena respuestas pendientes sin reproducirlas (evita voz superpuesta)
+
+### Capas de supresion de audio
+
+Dos mecanismos independientes previenen echo y self-interrupts:
+
+| Capa | Flag | Nivel | Uso |
+|------|------|-------|-----|
+| Clip-level | `audio.suppressing` | Absoluto (silencio total) | Durante reproduccion de WAVs/clips, tool execution. Nesteable via `_suppress_depth` counter |
+| Chunk-level | `audio.speaking` | RMS gate | Mientras Gemini habla, silencia mic a menos que RMS > 1500 (permite interrumpir) |
+
+### Threading model
+
+```
+macOS (mock):  Pygame MAIN thread    |  asyncio BACKGROUND thread
+Pi:            asyncio MAIN thread   |  Pygame BACKGROUND thread (SDL_VIDEODRIVER=dummy)
+```
+
+Obligatorio: SDL requiere main thread en macOS; asyncio necesita main thread en Pi para signal handling.
+
+### Resampleo de audio (Pi)
+
+Hardware I2S del Pi corre a 48kHz. Gemini espera 16kHz in / 24kHz out. `AudioManager` hace resampleo lineal in-line (interpolacion simple, suficiente para voz).
+
+### Stack tecnologico
+
+- Python 3.10 (requerido por el BSP de MangDang)
+- `uv` como package manager
+- Gemini Live API (`gemini-3.1-flash-live-preview`) para voz
+- Gemini API (`gemini-3.1-flash-lite-preview`) para quiz JSON y code execution
+- `sounddevice` (PortAudio), `opencv-python`, `vosk` (solo Linux), `pydub`, `pyyaml`, `httpx`, `pygame` + `Pillow`
+
+## Skills
+
+Este repo incluye dos skills de referencia en `skills/` que cualquier agente (Claude Code, Cursor, etc.) puede cargar como contexto al trabajar en este tipo de proyecto:
+
+| Skill | Cuando usarla |
+|-------|---------------|
+| [`skills/mini-pupper-2/SKILL.md`](skills/mini-pupper-2/SKILL.md) | Codigo para Mini Pupper 2 — servos, LCD, I2S, MangDang HardwareInterface, deployment en Pi, mock mode |
+| [`skills/gemini-live-api/SKILL.md`](skills/gemini-live-api/SKILL.md) | Apps de voz/vision en tiempo real con Gemini Live API — session setup, streaming, tool calling, activity detection, transcription |
+
+Cada skill es un documento conciso con:
+- Overview y specs clave
+- Patrones canonicos (codigo listo para copiar)
+- Tablas de comparacion y decisiones
+- Errores comunes y sus fixes
+
+## Creacion de skills
+
+Los skills anteriores se generaron con prompts estructurados, documentados en [`skill-creation-prompts.md`](skill-creation-prompts.md). Esos prompts se usan con agentes (Claude Code, Cursor, ChatGPT) que tienen acceso a web search para investigar docs oficiales y repos publicos antes de consolidar el skill.
+
+La idea: en vez de hacer copy-paste de documentacion, el agente investiga fuentes oficiales (ai.google.dev, minipupperdocs, mangdangroboticsclub/mini_pupper) y produce un skill conciso y practico. Cada prompt define:
+
+- Las fuentes que debe consultar (URLs especificas + web search queries)
+- Los topicos que el skill DEBE cubrir (numerados)
+- Constraints y formato (tablas, code blocks, brevedad)
+
+Reproducir los skills:
+
+```bash
+# En Claude Code o Cursor con un agente que tenga web search
+# Copiar el prompt correspondiente de skill-creation-prompts.md
+# Pegar y ejecutar — el agente investiga y genera skills/<nombre>/SKILL.md
 ```
 
 ### Movimiento por modo
