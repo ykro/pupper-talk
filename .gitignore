@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .env
 .env.local
+.DS_Store
 vosk-models/
 vendor/
 songs/en/
@@ -12,6 +13,4 @@ songs/clips/
 songs/song_index.json
 songs/whisper_report.json
 .claude/
-slides/
-docs/superpowers/specs/
 ~$*
