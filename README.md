@@ -1,5 +1,7 @@
 # pupper-talk
 
+**Español** · [English](README.en.md)
+
 Demo unificado para Mini Pupper 2 con 7 modos de interaccion por voz, cambio de modo por hotword, y dos backends de control (directo en Pi o via HTTP bridge).
 
 **Slides de la charla:** [GDE Summit 2026 — pupper-talk](https://docs.google.com/presentation/d/1scd2uwQbCOYL3UUnDrJSRUVo4u01OACLcjSv0aeEBcc/present)
