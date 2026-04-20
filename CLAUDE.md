@@ -79,7 +79,7 @@ Works everywhere — Vosk on Pi (Linux), Gemini switch_mode tool on laptop (macO
 
 ```
 core/                    Shared between on_device and using_bridge
-  audio.py               AudioManager (sounddevice, mic+speaker, nestable suppression)
+  audio.py               AudioManager (sounddevice, mic+speaker, nestable suppression, Pi output gain)
   stream.py              Generalized response handler with suppress_voice + tool mic suppression
   audio_router.py        Dual-stream mic to Vosk + Gemini, pause/resume
   hotword.py             VoskHotwordDetector (bilingual EN+ES, background)
@@ -96,15 +96,16 @@ core/                    Shared between on_device and using_bridge
 
 on_device/               Pi direct (MangDang HardwareInterface)
   __main__.py            Entry point + orchestrator + mode switching loop
-  gif_display.py         GIF renderer + Bumblebee/Sentiment eye renderers
+  gif_display.py         GIF renderer + Bumblebee/Sentiment eye renderers + ready text + switch_to_ready
   robot_motion.py        Servo control: 5 poses, 2 dances, mood reactions
 
-using_bridge/            Laptop + HTTP bridge (no display, no Vosk)
-  __main__.py            Entry point + orchestrator
-  bridge_client.py       httpx POST to pupper-bridge :9090
+using_bridge/            Laptop + HTTP bridge — laptop mirrors Pi display in Pygame window
+  __main__.py            Entry point + _run_session (async with) + DualDisplay fan-out + heartbeat
+  bridge_client.py       httpx POST to pupper-bridge :9090 (robot + display + heartbeat + disconnect)
 
 songs/                   Bumblebee clips (gitignored, 6.4GB) + catalog.yaml (tracked)
-assets/                  GIFs + Eridian WAVs
+assets/                  GIFs + Eridian WAVs + ready_{en,es}.wav (pre-rendered TTS for ready cue)
+scripts/                 gen_ready_wavs.py — regenerate ready clips via Gemini Live (Kore)
 ```
 
 ## Key Technical Decisions
@@ -120,7 +121,16 @@ core/stream.py handle_responses() suppresses mic during tool execution to preven
 
 ### Echo suppression (nestable counter)
 1. `audio.suppressing` (clip-level): absolute silence during clip/sequence playback + cooldown. Uses `_suppress_depth` counter to handle nested calls from Bumblebee + stream handler.
-2. `audio.speaking` (chunk-level): silence unless RMS > threshold (allows user interrupts).
+2. `audio.speaking` (chunk-level): silence unless RMS > `INTERRUPT_RMS` (default 1500 — lets normal-volume user interrupts through, rejects most speaker echo).
+
+### Gemini VAD sensitivity
+All modes use `START_SENSITIVITY_LOW` + `END_SENSITIVITY_LOW` so Gemini needs a clearer signal before deciding "user started talking" — mitigates self-interrupts when laptop speaker echo leaks into the mic. Tune in each mode's `get_live_config`.
+
+### Pi speaker gain
+`AudioManager._output_gain = 4.0` on Pi (I2S speaker is quiet), `1.0` in mock. Applied in `_queue_samples` with int16 clipping.
+
+### Ready cue is a pre-rendered WAV
+`assets/ready_{en,es}.wav` generated once via `scripts/gen_ready_wavs.py` (Gemini Live, voice Kore). `_speak_ready` just `audio.play_clip()`s the file — zero TTS variance, zero network latency on startup.
 
 ### Threading model
 Mock (macOS): Pygame main thread, asyncio background thread.
@@ -142,8 +152,13 @@ No "DO NOT", "Never", "Stay silent" in Gemini prompts.
 - `GEMINI_API_KEY` -- required
 - `BRIDGE_URL` -- pupper-bridge URL (default: http://localhost:9090)
 
+## Using_bridge specifics
+- `GifDisplay` runs on laptop main thread (Pygame window), shows same content as Pi LCD.
+- `DualDisplay` wrapper fans `set_mood` / `set_speaking` (called by sentiment/bumblebee) to local display + bridge.
+- `_heartbeat_loop` pings `/heartbeat` every 3s; on clean shutdown sends `/disconnect`. Pi reverts LCD to "bridge ready" text if no heartbeat for 8s.
+- Session lifecycle: `_run_session` opens `async with client.aio.live.connect(...)` per mode; returns next mode name on `switch:X` command to reopen.
+
 ## Known Issues
-- Session leak on many mode switches (using_bridge uses manual `__aenter__`)
 - Thread leak on mic stream cancel (`queue.Queue.get()` without timeout)
 - Hardcoded audio device index 1 on Pi (fragile if USB audio reorders)
 - Race condition in RobotMotion.react_to_mood (no _busy guard before dance)

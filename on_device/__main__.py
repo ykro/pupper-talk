@@ -47,31 +47,14 @@ def parse_args() -> argparse.Namespace:
 
 
 async def _speak_ready(api_key: str, lang: str, audio: AudioManager) -> None:
-    """Speak a short 'ready' announcement via a short-lived TTS session."""
-    text = "Listo." if lang == "es" else "Ready."
-    sys_text = "Say the word exactly as given. One word only. Confident tone."
-
-    client = genai.Client(api_key=api_key)
-    config = types.LiveConnectConfig(
-        response_modalities=["AUDIO"],
-        speech_config=types.SpeechConfig(
-            voice_config=types.VoiceConfig(
-                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=VOICE_NAME)
-            )
-        ),
-        system_instruction=types.Content(parts=[types.Part(text=sys_text)]),
-    )
+    """Play the pre-rendered ready clip (deterministic, no TTS variance)."""
+    from pathlib import Path
+    wav_name = "ready_es.wav" if lang == "es" else "ready_en.wav"
+    wav_path = Path(__file__).resolve().parent.parent / "assets" / wav_name
     try:
-        async with client.aio.live.connect(model=LIVE_MODEL, config=config) as session:
-            await session.send_realtime_input(text=text)
-            async for response in session.receive():
-                if response.data:
-                    await audio.play_audio(response.data)
-                sc = getattr(response, "server_content", None)
-                if sc and getattr(sc, "turn_complete", False):
-                    break
+        await audio.play_clip(str(wav_path))
     except Exception as exc:
-        logger.error("TTS ready failed: %s", exc)
+        logger.error("Ready clip failed: %s", exc)
 
 
 async def orchestrator(args: argparse.Namespace) -> None:

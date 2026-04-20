@@ -304,15 +304,15 @@ Hardware I2S del Pi corre a 48kHz. Gemini espera 16kHz in / 24kHz out. `AudioMan
 |---|-----------|-------------|
 | **Donde corre** | En el Pi directamente | Laptop (audio+Gemini) + Pi (servos via HTTP) |
 | **Servos** | MangDang HardwareInterface directo | HTTP POST a pupper-bridge (FastAPI) |
-| **LCD/Display** | ST7789 SPI (GIF o EyeRenderer) | Sin display (el proceso corre en laptop, el LCD esta en el Pi) |
-| **Audio** | Pi I2S (48kHz resample) | Laptop audio nativo (24kHz) |
+| **LCD/Display** | ST7789 SPI (GIF o EyeRenderer) | Pygame window en laptop + LCD del Pi via bridge (ambos sincronizados) |
+| **Audio** | Pi I2S (48kHz resample, gain x4) | Laptop audio nativo (24kHz) |
 | **Mock mode** | `--mock` simula todo en laptop (Pygame + servos mock) | No aplica (siempre corre en laptop) |
 | **Cambio de modo** | Vosk hotwords (Pi) o Gemini fallback | Gemini fallback (di "go rocky") |
 | **Camara (vision)** | Pi camera o USB | Webcam laptop |
 
 **Limitaciones on_device:** requiere Pi con Ubuntu 22.04 + ROS2 Humble + MangDang BSP, Python 3.10 (BSP), audio I2S a 48kHz requiere resample.
 
-**Limitaciones using_bridge:** sin display (el LCD esta en el Pi), requiere `pupper-bridge` (FastAPI :9090) corriendo en el Pi.
+**Limitaciones using_bridge:** requiere `pupper-bridge` (FastAPI :9090) corriendo en el Pi con el mismo renderer (GIFs + ojos Autobot/Sentiment). El laptop muestra una ventana Pygame que refleja el LCD del Pi, y la laptop hace heartbeat cada 3s — si se cae, el Pi vuelve a "bridge ready".
 
 ### Stack tecnologico
 
@@ -359,7 +359,6 @@ Reproducir los skills:
 
 | Issue | Severidad | Descripcion |
 |-------|-----------|-------------|
-| Session leak (bridge) | Media | `using_bridge` usa `__aenter__` manual en vez de `async with`. Puede leakear WebSocket connections tras muchos mode switches. Refactor futuro. |
 | Thread leak (mic) | Baja | `queue.Queue.get()` sin timeout en el executor thread. Tras muchos switches puede agotar el thread pool. Workaround: reiniciar la app. |
 | Audio device index (Pi) | Media | Device index hardcoded a `1` para I2S. Si el Pi enumera devices diferente tras reboot, audio falla silenciosamente. Verificar con `sd.query_devices()`. |
 | Race condition (motion) | Baja | `react_to_mood` no pone `_busy=True` antes de delegar a `_run_dance`. Dos calls concurrentes podrian pelear por los servos. En practica los tool calls son serializados. |

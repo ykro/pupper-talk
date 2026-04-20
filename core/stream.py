@@ -32,7 +32,8 @@ async def stream_microphone(session, audio: AudioManager) -> None:
         except asyncio.CancelledError:
             raise
         except Exception as exc:
-            logger.error("Error sending mic audio: %s", exc)
+            logger.exception("Error sending mic audio [%s]: %s", type(exc).__name__, exc)
+            return
 
 
 async def handle_responses(
@@ -101,4 +102,4 @@ async def handle_responses(
     except asyncio.CancelledError:
         raise
     except Exception as exc:
-        logger.error("Response handler error: %s", exc)
+        logger.exception("Response handler error [%s]: %s", type(exc).__name__, exc)

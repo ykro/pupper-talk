@@ -367,7 +367,7 @@ class BumblebeeMode(Mode):
             # No output_audio_transcription — Bumblebee ignores Gemini voice.
             realtime_input_config=types.RealtimeInputConfig(
                 automatic_activity_detection=types.AutomaticActivityDetection(
-                    start_of_speech_sensitivity="START_SENSITIVITY_HIGH",
+                    start_of_speech_sensitivity="START_SENSITIVITY_LOW",
                     end_of_speech_sensitivity="END_SENSITIVITY_LOW",
                     silence_duration_ms=500,
                 ),

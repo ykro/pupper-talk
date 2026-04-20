@@ -45,6 +45,8 @@ class AudioManager:
         self._speaker_queue: queue.Queue[np.ndarray] = queue.Queue()
         self._speaker_thread: threading.Thread | None = None
         self._speaker_running = False
+        # Software output gain — Pi I2S speaker is quiet; laptop already loud.
+        self._output_gain = 1.0 if mock else 4.0
 
         if mock:
             self._mic_rate = GEMINI_INPUT_RATE
@@ -139,6 +141,11 @@ class AudioManager:
 
     def _queue_samples(self, samples: np.ndarray) -> None:
         self._ensure_speaker()
+        if self._output_gain != 1.0:
+            samples = np.clip(
+                samples.astype(np.float32) * self._output_gain,
+                -32768, 32767,
+            ).astype(np.int16)
         self._speaker_queue.put(samples)
 
     async def play_audio(self, pcm_data: bytes) -> None:

@@ -86,30 +86,107 @@ async def _heartbeat_loop(robot) -> None:
 
 
 async def _speak_ready(api_key: str, lang: str, audio: AudioManager) -> None:
-    text = "Listo." if lang == "es" else "Ready."
-    sys_text = "Say the word exactly as given. One word only. Confident tone."
-
-    client = genai.Client(api_key=api_key)
-    config = types.LiveConnectConfig(
-        response_modalities=["AUDIO"],
-        speech_config=types.SpeechConfig(
-            voice_config=types.VoiceConfig(
-                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=VOICE_NAME)
-            )
-        ),
-        system_instruction=types.Content(parts=[types.Part(text=sys_text)]),
-    )
+    """Play the pre-rendered ready clip (deterministic, no TTS variance)."""
+    from pathlib import Path
+    wav_name = "ready_es.wav" if lang == "es" else "ready_en.wav"
+    wav_path = Path(__file__).resolve().parent.parent / "assets" / wav_name
     try:
-        async with client.aio.live.connect(model=LIVE_MODEL, config=config) as session:
-            await session.send_realtime_input(text=text)
-            async for response in session.receive():
-                if response.data:
-                    await audio.play_audio(response.data)
-                sc = getattr(response, "server_content", None)
-                if sc and getattr(sc, "turn_complete", False):
-                    break
+        await audio.play_clip(str(wav_path))
     except Exception as exc:
-        logger.error("TTS ready failed: %s", exc)
+        logger.error("Ready clip failed: %s", exc)
+
+
+async def _run_session(
+    client, current_mode, args, audio, robot, audio_router,
+    use_gemini_switch, command_queue, display, camera_ref,
+) -> str | None:
+    """Run one mode session inside `async with`. Return next mode name or None."""
+    await current_mode.on_enter(audio=audio, lang=args.lang)
+    await _sync_display(display, robot, current_mode.name, current_mode.gif_path, initial=True)
+    if current_mode.name in ("bumblebee", "sentiment") and display:
+        current_mode._eye_display = DualDisplay(display, robot)
+
+    live_config = current_mode.get_live_config(args.lang)
+    if use_gemini_switch:
+        inject_switch_tool(live_config, current_mode.name)
+
+    camera = camera_ref[0]
+    if current_mode.name == "vision" and camera is None:
+        try:
+            from core.camera import CameraManager
+            camera = CameraManager(mock=True)
+            camera_ref[0] = camera
+        except ImportError:
+            pass
+
+    next_mode_name: str | None = None
+    async with client.aio.live.connect(model=LIVE_MODEL, config=live_config) as session:
+        greeting = current_mode.get_greeting(args.lang)
+        if greeting:
+            await session.send_realtime_input(text=greeting)
+
+        if audio_router:
+            audio_router.set_session(session)
+
+        tasks: list[asyncio.Task] = []
+        if audio_router:
+            tasks.append(asyncio.create_task(audio_router.run()))
+        else:
+            tasks.append(asyncio.create_task(stream_microphone(session, audio)))
+
+        handler_task = asyncio.create_task(
+            handle_responses(
+                session, audio, current_mode, client, robot,
+                command_queue=command_queue if use_gemini_switch else None,
+            )
+        )
+        tasks.append(handler_task)
+
+        extra_tasks = await current_mode.extra_tasks(
+            session=session, audio=audio, camera=camera, robot=robot,
+        )
+        tasks.extend(extra_tasks)
+
+        try:
+            while True:
+                if not command_queue:
+                    await asyncio.gather(*tasks)
+                    break
+
+                cmd_task = asyncio.create_task(command_queue.get())
+                done, _ = await asyncio.wait(
+                    [cmd_task, handler_task],
+                    return_when=asyncio.FIRST_COMPLETED,
+                )
+
+                if cmd_task in done:
+                    cmd = cmd_task.result()
+                    logger.info("CMD: %s", cmd)
+
+                    if cmd == "pause":
+                        if audio_router:
+                            audio_router.pause()
+                        continue
+                    if cmd == "resume":
+                        if audio_router:
+                            audio_router.resume()
+                        continue
+                    if cmd.startswith("switch:"):
+                        target = cmd.split(":", 1)[1]
+                        if target == current_mode.name:
+                            continue
+                        next_mode_name = target
+                        audio.flush_speaker()
+                        break
+                else:
+                    cmd_task.cancel()
+                    break
+        finally:
+            for t in tasks:
+                t.cancel()
+            await current_mode.on_exit()
+
+    return next_mode_name
 
 
 async def orchestrator(args: argparse.Namespace) -> None:
@@ -122,14 +199,12 @@ async def orchestrator(args: argparse.Namespace) -> None:
     register_modes()
     audio = AudioManager(mock=True)  # Always laptop mode.
 
-    # Robot backend — HTTP bridge to Pi.
     from using_bridge.bridge_client import BridgeClient
     robot = BridgeClient(base_url=args.bridge_url)
     await robot.initialize()
 
     client = genai.Client(api_key=api_key)
 
-    # Hotword support.
     command_queue: asyncio.Queue[str] = asyncio.Queue()
     hotword_detector = None
     audio_router = None
@@ -152,161 +227,34 @@ async def orchestrator(args: argparse.Namespace) -> None:
     if use_gemini_switch:
         logger.info("Using Gemini switch_mode fallback")
 
-    current_mode = create_mode(args.mode)
-    await current_mode.on_enter(audio=audio, lang=args.lang)
-
     display = getattr(_thread_local, "display", None)
-    await _sync_display(display, robot, current_mode.name, current_mode.gif_path, initial=True)
-    if current_mode.name in ("bumblebee", "sentiment") and display:
-        current_mode._eye_display = DualDisplay(display, robot)
-
-    await _speak_ready(api_key, args.lang, audio)
-
-    live_config = current_mode.get_live_config(args.lang)
-    if use_gemini_switch:
-        inject_switch_tool(live_config, current_mode.name)
-
-    session = await client.aio.live.connect(
-        model=LIVE_MODEL, config=live_config
-    ).__aenter__()
-
-    greeting = current_mode.get_greeting(args.lang)
-    if greeting:
-        await session.send_realtime_input(text=greeting)
-
-    if audio_router:
-        audio_router.set_session(session)
-
-    camera = None
-    if args.mode == "vision":
-        try:
-            from core.camera import CameraManager
-            camera = CameraManager(mock=True)
-        except ImportError:
-            pass
-
-    tasks: list[asyncio.Task] = []
+    camera_ref: list = [None]
     heartbeat_task = asyncio.create_task(_heartbeat_loop(robot))
-    tasks.append(heartbeat_task)
-    if audio_router:
-        tasks.append(asyncio.create_task(audio_router.run()))
-    else:
-        tasks.append(asyncio.create_task(stream_microphone(session, audio)))
 
-    handler_task = asyncio.create_task(
-        handle_responses(
-            session, audio, current_mode, client, robot,
-            command_queue=command_queue if use_gemini_switch else None,
-        )
-    )
-    tasks.append(handler_task)
-
-    extra_tasks = await current_mode.extra_tasks(
-        session=session, audio=audio, camera=camera, robot=robot,
-    )
-    tasks.extend(extra_tasks)
-
-    current_mode_name = args.mode
+    current_mode = create_mode(args.mode)
+    await _speak_ready(api_key, args.lang, audio)
 
     try:
         while True:
-            if not hotword_detector and not use_gemini_switch:
-                await asyncio.gather(*tasks)
-                break
-
-            cmd_task = asyncio.create_task(command_queue.get())
-            done, _ = await asyncio.wait(
-                [cmd_task, handler_task],
-                return_when=asyncio.FIRST_COMPLETED,
+            next_name = await _run_session(
+                client, current_mode, args, audio, robot, audio_router,
+                use_gemini_switch, command_queue, display, camera_ref,
             )
-
-            if cmd_task in done:
-                cmd = cmd_task.result()
-                logger.info("HOTWORD: %s", cmd)
-
-                if cmd == "pause":
-                    if audio_router:
-                        audio_router.pause()
-                    continue
-                elif cmd == "resume":
-                    if audio_router:
-                        audio_router.resume()
-                    continue
-                elif cmd.startswith("switch:"):
-                    new_name = cmd.split(":")[1]
-                    if new_name == current_mode_name:
-                        continue
-
-                    handler_task.cancel()
-                    for t in extra_tasks:
-                        t.cancel()
-                    await current_mode.on_exit()
-                    try:
-                        await session.__aexit__(None, None, None)
-                    except Exception:
-                        pass
-                    audio.flush_speaker()
-
-                    current_mode = create_mode(new_name)
-                    current_mode_name = new_name
-                    await current_mode.on_enter(audio=audio, lang=args.lang)
-
-                    await _sync_display(display, robot, new_name, current_mode.gif_path, initial=False)
-                    if new_name in ("bumblebee", "sentiment") and display:
-                        current_mode._eye_display = DualDisplay(display, robot)
-
-                    if new_name == "vision" and camera is None:
-                        try:
-                            from core.camera import CameraManager
-                            camera = CameraManager(mock=True)
-                        except ImportError:
-                            pass
-
-                    new_config = current_mode.get_live_config(args.lang)
-                    if use_gemini_switch:
-                        inject_switch_tool(new_config, current_mode.name)
-
-                    session = await client.aio.live.connect(
-                        model=LIVE_MODEL, config=new_config,
-                    ).__aenter__()
-
-                    greeting = current_mode.get_greeting(args.lang)
-                    if greeting:
-                        await session.send_realtime_input(text=greeting)
-
-                    if audio_router:
-                        audio_router.set_session(session)
-
-                    handler_task = asyncio.create_task(
-                        handle_responses(
-                            session, audio, current_mode, client, robot,
-                            command_queue=command_queue if use_gemini_switch else None,
-                        )
-                    )
-                    extra_tasks = await current_mode.extra_tasks(
-                        session=session, audio=audio, camera=camera, robot=robot,
-                    )
-            else:
-                cmd_task.cancel()
+            if not next_name:
                 break
-
+            current_mode = create_mode(next_name)
     except asyncio.CancelledError:
         pass
     except KeyboardInterrupt:
         pass
     finally:
-        for t in tasks:
-            t.cancel()
+        heartbeat_task.cancel()
         audio.close()
         try:
             await robot.disconnect()
         except Exception:
             pass
         await robot.close()
-        try:
-            await session.__aexit__(None, None, None)
-        except Exception:
-            pass
 
 
 _thread_local = threading.local()
