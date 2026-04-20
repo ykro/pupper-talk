@@ -57,10 +57,7 @@ async def _sync_display(display, bridge, mode_name, gif_path, initial: bool) -> 
         await bridge.display_eyes(style)
     else:
         if display:
-            if initial:
-                display.switch_gif(gif_path)
-            else:
-                display.switch_to_gif(gif_path)
+            display.switch_to_gif(gif_path)
         await bridge.display_gif(mode_name)
 
 

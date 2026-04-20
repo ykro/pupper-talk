@@ -45,19 +45,14 @@ class AudioManager:
         self._speaker_queue: queue.Queue[np.ndarray] = queue.Queue()
         self._speaker_thread: threading.Thread | None = None
         self._speaker_running = False
-        # Software output gain — Pi I2S speaker is quiet; laptop already loud.
-        self._output_gain = 1.0 if mock else 4.0
+        self._output_gain = 1.0
 
         if mock:
             self._mic_rate = GEMINI_INPUT_RATE
             self._speaker_rate = GEMINI_OUTPUT_RATE
-            self._audio_device = None
         else:
             self._mic_rate = PI_HW_RATE
             self._speaker_rate = PI_HW_RATE
-            self._audio_device = 1
-            sd.default.device = (1, 1)
-            logger.info("Pi audio device set to hw:1,0 (I2S)")
 
         self.speaking = False
         self.suppressing = False
