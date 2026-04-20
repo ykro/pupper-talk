@@ -116,8 +116,9 @@ def _lerp_color(c1, c2, t):
 class GifDisplay:
     """Display animated GIFs with runtime switching + Bumblebee eye mode."""
 
-    def __init__(self, gif_path: str | None = None, mock: bool = False):
+    def __init__(self, gif_path: str | None = None, mock: bool = False, ready_text: str = "Ready"):
         self._mock = mock
+        self._ready_text = ready_text
         self._running = False
         self._thread = None
         self._frames: list[pygame.Surface] = []
@@ -343,10 +344,10 @@ class GifDisplay:
         if self._current_gif:
             self._load_gif_frames(self._current_gif)
         else:
-            # Static ready screen.
             render_surface.fill((0, 0, 0))
-            font = pygame.font.SysFont(None, 64)
-            text = font.render("Ready", True, (255, 255, 255))
+            font_size = 56 if len(self._ready_text) <= 12 else 40
+            font = pygame.font.SysFont(None, font_size)
+            text = font.render(self._ready_text, True, (255, 255, 255))
             rect = text.get_rect(center=(LCD_WIDTH // 2, LCD_HEIGHT // 2))
             render_surface.blit(text, rect)
             self._frames = [render_surface.copy()]

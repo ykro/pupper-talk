@@ -66,6 +66,22 @@ class BridgeClient:
         logger.info("BRIDGE: react mood=%s", mood)
         await self._post("/react", {"mood": mood})
 
+    # -- Display sync --------------------------------------------------------
+
+    async def display_gif(self, mode: str) -> None:
+        logger.info("BRIDGE: display gif mode=%s", mode)
+        await self._post("/display/gif", {"mode": mode})
+
+    async def display_eyes(self, style: str) -> None:
+        logger.info("BRIDGE: display eyes style=%s", style)
+        await self._post("/display/eyes", {"style": style})
+
+    async def display_mood(self, mood: str) -> None:
+        await self._post("/display/mood", {"mood": mood})
+
+    async def display_speaking(self, speaking: bool) -> None:
+        await self._post("/display/speaking", {"speaking": speaking})
+
     async def close(self) -> None:
         if self._client:
             await self._client.aclose()

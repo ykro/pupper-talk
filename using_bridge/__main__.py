@@ -5,6 +5,7 @@ import asyncio
 import logging
 import os
 import sys
+import threading
 
 from dotenv import load_dotenv
 from google import genai
@@ -14,6 +15,7 @@ from core.audio import AudioManager
 from core.modes import create_mode, register_modes
 from core.modes.base import inject_switch_tool
 from core.stream import handle_responses, stream_microphone
+from on_device.gif_display import GifDisplay
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,6 +30,38 @@ MODE_LABELS = {
     "live": "Conversacion", "rocky": "Rocky", "bumblebee": "Bumblebee",
     "vision": "Vision", "quiz": "Quiz", "code": "Codigo",
 }
+
+
+class DualDisplay:
+    """Fan-out wrapper: mirror eye-mode calls to local GifDisplay + bridge."""
+
+    def __init__(self, local, bridge):
+        self._local = local
+        self._bridge = bridge
+
+    def set_mood(self, mood: str) -> None:
+        self._local.set_mood(mood)
+        asyncio.create_task(self._bridge.display_mood(mood))
+
+    def set_speaking(self, speaking: bool) -> None:
+        self._local.set_speaking(speaking)
+        asyncio.create_task(self._bridge.display_speaking(speaking))
+
+
+async def _sync_display(display, bridge, mode_name, gif_path, initial: bool) -> None:
+    """Drive both local display and bridge for a mode. Returns the _eye_display to inject."""
+    if mode_name in ("bumblebee", "sentiment"):
+        style = "sentiment" if mode_name == "sentiment" else "bumblebee"
+        if display:
+            display.switch_to_eyes(style)
+        await bridge.display_eyes(style)
+    else:
+        if display:
+            if initial:
+                display.switch_gif(gif_path)
+            else:
+                display.switch_to_gif(gif_path)
+        await bridge.display_gif(mode_name)
 
 
 def parse_args() -> argparse.Namespace:
@@ -110,6 +144,11 @@ async def orchestrator(args: argparse.Namespace) -> None:
 
     current_mode = create_mode(args.mode)
     await current_mode.on_enter(audio=audio, lang=args.lang)
+
+    display = getattr(_thread_local, "display", None)
+    await _sync_display(display, robot, current_mode.name, current_mode.gif_path, initial=True)
+    if current_mode.name in ("bumblebee", "sentiment") and display:
+        current_mode._eye_display = DualDisplay(display, robot)
 
     await _speak_ready(api_key, args.lang, audio)
 
@@ -200,6 +239,10 @@ async def orchestrator(args: argparse.Namespace) -> None:
                     current_mode_name = new_name
                     await current_mode.on_enter(audio=audio, lang=args.lang)
 
+                    await _sync_display(display, robot, new_name, current_mode.gif_path, initial=False)
+                    if new_name in ("bumblebee", "sentiment") and display:
+                        current_mode._eye_display = DualDisplay(display, robot)
+
                     if new_name == "vision" and camera is None:
                         try:
                             from core.camera import CameraManager
@@ -250,12 +293,27 @@ async def orchestrator(args: argparse.Namespace) -> None:
             pass
 
 
+_thread_local = threading.local()
+
+
 def main() -> None:
     args = parse_args()
-    try:
-        asyncio.run(orchestrator(args))
-    except KeyboardInterrupt:
-        logger.info("Interrupted by user")
+    register_modes()
+
+    initial_mode = create_mode(args.mode)
+    display = GifDisplay(initial_mode.gif_path, mock=True)
+
+    def _run_async():
+        _thread_local.display = display
+        try:
+            asyncio.run(orchestrator(args))
+        except KeyboardInterrupt:
+            logger.info("Interrupted by user")
+
+    async_thread = threading.Thread(target=_run_async, daemon=True)
+    async_thread.start()
+    display.run_blocking()
+    async_thread.join(timeout=3.0)
 
 
 if __name__ == "__main__":
