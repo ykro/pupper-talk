@@ -11,7 +11,7 @@ from core.modes.base import Mode
 
 logger = logging.getLogger(__name__)
 
-INTERRUPT_RMS = 800
+INTERRUPT_RMS = 3000
 
 
 async def stream_microphone(session, audio: AudioManager) -> None:
