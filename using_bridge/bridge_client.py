@@ -82,6 +82,12 @@ class BridgeClient:
     async def display_speaking(self, speaking: bool) -> None:
         await self._post("/display/speaking", {"speaking": speaking})
 
+    async def heartbeat(self) -> None:
+        await self._post("/heartbeat")
+
+    async def disconnect(self) -> None:
+        await self._post("/disconnect")
+
     async def close(self) -> None:
         if self._client:
             await self._client.aclose()

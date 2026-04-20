@@ -75,6 +75,16 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+async def _heartbeat_loop(robot) -> None:
+    """Ping the bridge every 3s so it knows we're still alive."""
+    try:
+        while True:
+            await asyncio.sleep(3.0)
+            await robot.heartbeat()
+    except asyncio.CancelledError:
+        pass
+
+
 async def _speak_ready(api_key: str, lang: str, audio: AudioManager) -> None:
     text = "Listo." if lang == "es" else "Ready."
     sys_text = "Say the word exactly as given. One word only. Confident tone."
@@ -176,6 +186,8 @@ async def orchestrator(args: argparse.Namespace) -> None:
             pass
 
     tasks: list[asyncio.Task] = []
+    heartbeat_task = asyncio.create_task(_heartbeat_loop(robot))
+    tasks.append(heartbeat_task)
     if audio_router:
         tasks.append(asyncio.create_task(audio_router.run()))
     else:
@@ -286,6 +298,10 @@ async def orchestrator(args: argparse.Namespace) -> None:
         for t in tasks:
             t.cancel()
         audio.close()
+        try:
+            await robot.disconnect()
+        except Exception:
+            pass
         await robot.close()
         try:
             await session.__aexit__(None, None, None)

@@ -133,6 +133,7 @@ class GifDisplay:
         self._speaking_queue: queue.Queue[bool] = queue.Queue()
         self._eye_color_style = "bumblebee"  # "bumblebee" or "sentiment"
         self._color_style_queue: queue.Queue[str] = queue.Queue()
+        self._ready_queue: queue.Queue[bool] = queue.Queue()
 
     # -- Public API ---------------------------------------------------------
 
@@ -157,6 +158,11 @@ class GifDisplay:
     def set_speaking(self, speaking: bool) -> None:
         """Thread-safe speaking state (eye mode only)."""
         self._speaking_queue.put(speaking)
+
+    def switch_to_ready(self) -> None:
+        """Revert LCD to the startup ready text (e.g. on disconnect)."""
+        self._eye_mode_queue.put(False)
+        self._ready_queue.put(True)
 
     def start(self):
         if not self._mock:
@@ -378,6 +384,25 @@ class GifDisplay:
                         logger.info("Display: switched to EYE mode")
                     else:
                         logger.info("Display: switched to GIF mode")
+            except queue.Empty:
+                pass
+
+            # Check ready text request (forces back to startup text).
+            try:
+                self._ready_queue.get_nowait()
+                render_surface.fill((0, 0, 0))
+                font_size = 56 if len(self._ready_text) <= 12 else 40
+                font = pygame.font.SysFont(None, font_size)
+                text = font.render(self._ready_text, True, (255, 255, 255))
+                rect = text.get_rect(center=(LCD_WIDTH // 2, LCD_HEIGHT // 2))
+                render_surface.blit(text, rect)
+                self._frames = [render_surface.copy()]
+                self._frame_durations = [1.0]
+                self._current_gif = None
+                frame_idx = 0
+                eye_mode = False
+                self._eye_mode = False
+                logger.info("Display: reverted to ready text")
             except queue.Empty:
                 pass
 
