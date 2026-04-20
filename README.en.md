@@ -149,6 +149,7 @@ uv run python -m on_device --mode rocky --lang en
 uv run python -m on_device --mode vision --lang en
 
 # Laptop + HTTP bridge — voice on laptop, motion on Pi
+# Requires pupper-bridge running on the Pi: https://github.com/ykro/pupper-bridge
 uv run python -m using_bridge --mode quiz --lang en --bridge-url http://192.168.86.20:9090
 ```
 
@@ -314,7 +315,7 @@ Pi I2S hardware runs at 48kHz. Gemini expects 16kHz in / 24kHz out. `AudioManage
 
 **on_device limitations:** requires a Pi with Ubuntu 22.04 + ROS2 Humble + MangDang BSP, Python 3.10 (BSP), I2S audio at 48kHz needs resampling.
 
-**using_bridge limitations:** no display (the LCD is on the Pi), requires `pupper-bridge` (FastAPI :9090) running on the Pi.
+**using_bridge limitations:** no display (the LCD is on the Pi), requires [`pupper-bridge`](https://github.com/ykro/pupper-bridge) (FastAPI :9090) running on the Pi.
 
 ### Tech stack
 

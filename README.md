@@ -147,6 +147,7 @@ uv run python -m on_device --mode rocky --lang es
 uv run python -m on_device --mode vision --lang es
 
 # Laptop + bridge HTTP — voz en laptop, movimiento en Pi
+# Requiere pupper-bridge corriendo en el Pi: https://github.com/ykro/pupper-bridge
 uv run python -m using_bridge --mode quiz --lang en --bridge-url http://192.168.86.20:9090
 ```
 
@@ -312,7 +313,7 @@ Hardware I2S del Pi corre a 48kHz. Gemini espera 16kHz in / 24kHz out. `AudioMan
 
 **Limitaciones on_device:** requiere Pi con Ubuntu 22.04 + ROS2 Humble + MangDang BSP, Python 3.10 (BSP), audio I2S a 48kHz requiere resample.
 
-**Limitaciones using_bridge:** requiere `pupper-bridge` (FastAPI :9090) corriendo en el Pi con el mismo renderer (GIFs + ojos Autobot/Sentiment). El laptop muestra una ventana Pygame que refleja el LCD del Pi, y la laptop hace heartbeat cada 3s — si se cae, el Pi vuelve a "bridge ready".
+**Limitaciones using_bridge:** requiere [`pupper-bridge`](https://github.com/ykro/pupper-bridge) (FastAPI :9090) corriendo en el Pi con el mismo renderer (GIFs + ojos Autobot/Sentiment). El laptop muestra una ventana Pygame que refleja el LCD del Pi, y la laptop hace heartbeat cada 3s — si se cae, el Pi vuelve a "bridge ready".
 
 ### Stack tecnologico
 
