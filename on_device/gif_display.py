@@ -316,7 +316,7 @@ class GifDisplay:
             sys.path.insert(0, bsp_path)
         try:
             from MangDang.LCD.ST7789 import ST7789
-            lcd = ST7789(spidev=None)
+            lcd = ST7789()
             logger.info("ST7789 LCD initialized")
             return lcd
         except ImportError:
